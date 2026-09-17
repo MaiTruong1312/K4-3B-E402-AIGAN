@@ -1352,6 +1352,10 @@
     }
 
     .source-link {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
       color: var(--black);
       font-family: 'Cinzel', serif;
       font-size: 11px;
@@ -1362,6 +1366,85 @@
       align-items: center;
       gap: 4px;
       text-transform: uppercase;
+    }
+    .citation-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.62);
+    }
+    .citation-modal.open { display: flex; }
+    .citation-dialog {
+      width: min(760px, 100%);
+      max-height: min(720px, 88vh);
+      overflow: auto;
+      background: #fff;
+      border: 2px solid var(--black);
+      box-shadow: 12px 12px 0 var(--black);
+      padding: 28px;
+    }
+    .citation-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--black);
+    }
+    .citation-title { margin: 0; font-family: 'Cinzel', serif; font-size: 20px; }
+    .citation-close {
+      border: 1px solid var(--black);
+      background: #fff;
+      width: 34px;
+      height: 34px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+    .citation-item { padding: 20px 0; border-bottom: 1px solid #c9c9c9; }
+    .citation-id { font-family: 'Cinzel', serif; font-weight: 800; font-size: 12px; letter-spacing: .1em; }
+    .citation-text { margin-top: 8px; line-height: 1.65; color: var(--charcoal); }
+    .ai-loading {
+      position: fixed;
+      inset: 0;
+      z-index: 2100;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(3px);
+    }
+    .ai-loading.open { display: grid; }
+    .ai-loading-card {
+      width: min(560px, 100%);
+      border: 2px solid var(--black);
+      background: #fff;
+      box-shadow: 10px 10px 0 var(--black);
+      padding: 32px;
+    }
+    .ai-loading-mark {
+      width: 48px;
+      height: 48px;
+      border: 3px solid #d8d8d8;
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: ai-spin .8s linear infinite;
+      margin-bottom: 22px;
+    }
+    .ai-loading-title { font-family: 'Cinzel', serif; font-weight: 900; letter-spacing: .08em; font-size: 16px; }
+    .ai-loading-message { min-height: 48px; margin-top: 10px; color: var(--charcoal); line-height: 1.55; }
+    .ai-loading-track { height: 4px; margin-top: 20px; overflow: hidden; background: #e1e1e1; }
+    .ai-loading-bar { width: 38%; height: 100%; background: #000; animation: ai-progress 1.6s ease-in-out infinite; }
+    @keyframes ai-spin { to { transform: rotate(360deg); } }
+    @keyframes ai-progress {
+      0% { transform: translateX(-110%); }
+      100% { transform: translateX(290%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ai-loading-mark, .ai-loading-bar { animation-duration: 2.8s; }
     }
 
     /* COMPARISON GRID (SCREEN 5) */
@@ -1667,13 +1750,6 @@
         <span>Hoàn thành & Mở lý thuyết</span>
       </li>
     </ul>
-    <div class="step-nav-right">
-      <span>Kịch bản kiểm thử:</span>
-      <select id="scenario-selector" onchange="changeScenario(this.value)">
-        <option value="sufficient">Đủ căn cứ (Happy Path: Ngộ nhận RAG vs Fine-tuning)</option>
-        <option value="insufficient">Chưa đủ căn cứ (Edge Case: Trả lời mơ hồ, cần hỏi lại)</option>
-      </select>
-    </div>
   </div>
 
   <!-- ================= VLEARN ACADEMY HEADER ================= -->
@@ -1999,68 +2075,24 @@
                 <span class="meta-tag" id="question-concept-tag">Khái niệm: Retrieval-Augmented Generation (RAG)</span>
                 <span class="no-score-badge">Không tính điểm</span>
               </div>
-              <div class="question-text" id="question-text-el">
-                Một công ty vừa ban hành quy chế nội bộ mới vào sáng nay. Tại sao mô hình LLM mặc định không thể trả lời
-                đúng quy chế này, và cơ chế RAG can thiệp như thế nào?
-              </div>
-            </div>
-
-            <!-- Choices Group -->
-            <label class="explain-label">Chọn phương án bạn cho là đúng nhất:</label>
-            <div class="choice-group" id="choice-container">
-              <div class="choice-item selected" id="choice-A" onclick="selectChoice('A')">
-                <div class="choice-letter">A</div>
-                <div class="choice-content" id="choice-text-A">
-                  <strong>RAG huấn luyện lại (fine-tune) mô hình</strong> với văn bản quy chế mới để cập nhật trọng số
-                  tri thức vĩnh viễn vào bộ não của LLM.
-                </div>
-              </div>
-
-              <div class="choice-item" id="choice-B" onclick="selectChoice('B')">
-                <div class="choice-letter">B</div>
-                <div class="choice-content" id="choice-text-B">
-                  <strong>RAG tìm kiếm văn bản liên quan</strong> tại thời điểm người dùng hỏi rồi nhúng vào context
-                  window (ngữ cảnh câu hỏi) để LLM đọc và trả lời bám sát nguồn.
-                </div>
-              </div>
-
-              <div class="choice-item" id="choice-C" onclick="selectChoice('C')">
-                <div class="choice-letter">C</div>
-                <div class="choice-content" id="choice-text-C">
-                  <strong>RAG thay thế hoàn toàn mô hình ngôn ngữ</strong> bằng một công cụ tìm kiếm SQL cơ sở dữ liệu
-                  truyền thống.
-                </div>
-              </div>
+              <div class="explain-label">Câu hỏi từ bài học:</div>
+              <div class="question-text" id="lesson-question-text">Đang tải câu hỏi...</div>
             </div>
 
             <!-- Written explanation -->
             <div class="explain-section">
               <label class="explain-label" for="user-explanation">
-                Giải thích ngắn bằng lời của bạn (1-2 câu):
+                Cách hiểu hoặc câu trả lời hiện tại của bạn:
               </label>
               <div class="explain-sub">
                 Phần giải thích giúp AI hiểu rõ bạn đang suy luận thế nào (thay vì đoán mò đáp án).
               </div>
-              <textarea class="explain-textarea" id="user-explanation"
-                placeholder="Ví dụ: Em nghĩ khi có tài liệu mới thì phải nạp vào để mô hình học lại các tham số..."></textarea>
-
-              <div class="preset-bar">
-                <span class="preset-label">Nạp nhanh câu trả lời mẫu:</span>
-                <button class="preset-btn" type="button" onclick="fillPreset('misconception')">
-                  Mẫu 1: Trả lời sai (Ngộ nhận phổ biến - Đủ căn cứ)
-                </button>
-                <button class="preset-btn" type="button" onclick="fillPreset('correct')">
-                  Mẫu 2: Trả lời đúng ngay
-                </button>
-                <button class="preset-btn" type="button" onclick="fillPreset('vague')">
-                  Mẫu 3: Trả lời mơ hồ (Chưa đủ căn cứ)
-                </button>
-              </div>
+              <textarea class="explain-textarea" id="user-explanation" placeholder="Viết điều bạn đang nghĩ, kể cả khi chưa chắc đúng..."></textarea>
             </div>
 
             <div class="btn-row">
-              <button class="btn-primary" type="button" onclick="submitStep2()">
-                Gửi câu trả lời để kiểm tra Đúng / Sai →
+              <button class="btn-primary" id="btn-submit-answer" type="button" onclick="submitStep2()">
+                Gửi để AI phân tích cách hiểu →
               </button>
               <button class="btn-secondary" type="button" onclick="goToStep(1)">
                 Quay lại Dashboard
@@ -2136,9 +2168,9 @@
                   <strong>Căn cứ tham khảo:</strong> <span id="correct-source-tag">Tài liệu VLearn AI Base · Khái niệm
                     Context Injection</span>
                 </div>
-                <a class="source-link" href="#source" onclick="alert('Mở tài liệu: VLearn AI Knowledge Base')">
+                <button class="source-link" type="button" onclick="openCitationModal()">
                   Xem bài giảng ↗
-                </a>
+                </button>
               </div>
 
               <div class="btn-row">
@@ -2196,10 +2228,9 @@
                     <strong>Căn cứ tham khảo:</strong> <span id="hint-source-text">Tài liệu VLearn AI Base · Khái niệm
                       Context Injection & Retrieval</span>
                   </div>
-                  <a class="source-link" href="#source"
-                    onclick="alert('Mở tài liệu: Section 3.1 - RAG vs Fine-tuning Pipeline')">
+                  <button class="source-link" type="button" onclick="openCitationModal()">
                     Xem trích dẫn ↗
-                  </a>
+                  </button>
                 </div>
               </div>
 
@@ -2267,23 +2298,6 @@
               </div>
             </div>
 
-            <div class="spec-card">
-              <div class="spec-card-title">
-                <span>🧪</span> Thử nghiệm các nhánh phản hồi
-              </div>
-              <div class="spec-card-body">
-                <button class="preset-btn" style="width: 100%; margin-bottom: 8px;" onclick="simulateFeedback('wrong')">
-                  Nhánh 1: Trả lời Sai (Nhận gợi ý D2)
-                </button>
-                <button class="preset-btn" style="width: 100%; margin-bottom: 8px;"
-                  onclick="simulateFeedback('correct')">
-                  Nhánh 2: Trả lời Đúng ngay
-                </button>
-                <button class="preset-btn" style="width: 100%;" onclick="simulateFeedback('vague')">
-                  Nhánh 3: Trả lời Mơ hồ
-                </button>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -2692,6 +2706,28 @@
 
   </main>
 
+  <div class="ai-loading" id="ai-loading" role="status" aria-live="polite" aria-label="AI đang phân tích">
+    <div class="ai-loading-card">
+      <div class="ai-loading-mark" aria-hidden="true"></div>
+      <div class="ai-loading-title">TRỢ LÝ SƯ PHẠM ĐANG PHÂN TÍCH</div>
+      <div class="ai-loading-message" id="ai-loading-message">Đang đọc cách bạn suy luận...</div>
+      <div class="ai-loading-track"><div class="ai-loading-bar"></div></div>
+    </div>
+  </div>
+
+  <div class="citation-modal" id="citation-modal" role="dialog" aria-modal="true" aria-labelledby="citation-modal-title" onclick="closeCitationModal(event)">
+    <div class="citation-dialog">
+      <div class="citation-head">
+        <div>
+          <div class="eyebrow">CĂN CỨ ĐƯỢC AI SỬ DỤNG</div>
+          <h2 class="citation-title" id="citation-modal-title">Trích dẫn tài liệu bài học</h2>
+        </div>
+        <button class="citation-close" type="button" aria-label="Đóng" onclick="closeCitationModal()">×</button>
+      </div>
+      <div id="citation-list"></div>
+    </div>
+  </div>
+
   <!-- ================= FOOTER ================= -->
   <footer class="vlearn-footer">
     <div>VLearn International Academy · Hackathon AI Batch 04 · Lớp 3B · Phòng E402 · Cụm B2 · Track D2</div>
@@ -2701,84 +2737,142 @@
 
   <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // QUESTIONS DATABASE FOR TRACK D2 PRE-THEORY QUIZ
-    const questionsData = [
-      {
-        id: 1,
-        indexLabel: "CÂU HỎI 1 / 2",
-        stepTag: "BƯỚC II / V · CÂU HỎI 1 / 2",
-        progressBadge: "Tiến độ: Câu 1 / 2",
-        concept: "Khái niệm: Retrieval-Augmented Generation (RAG)",
-        question: "Một công ty vừa ban hành quy chế nội bộ mới vào sáng nay. Tại sao mô hình LLM mặc định không thể trả lời đúng quy chế này, và cơ chế RAG can thiệp như thế nào?",
-        choices: [
-          {
-            id: "A",
-            text: "<strong>RAG huấn luyện lại (fine-tune) mô hình</strong> với văn bản quy chế mới để cập nhật trọng số tri thức vĩnh viễn vào bộ não của LLM.",
-            isCorrect: false,
-            misconceptionTitle: "Phát hiện điểm nghẽn: Bạn đang phân vân giữa RAG và Fine-tuning (cập nhật weights)",
-            userSummary: "Bạn nghĩ rằng khi có tài liệu mới thì phải huấn luyện lại để cập nhật trọng số vào bộ não mô hình. Đây là cơ chế của Fine-tuning, không phải RAG!"
-          },
-          {
-            id: "B",
-            text: "<strong>RAG tìm kiếm văn bản liên quan</strong> tại thời điểm người dùng hỏi rồi nhúng vào context window (ngữ cảnh câu hỏi) để LLM đọc và trả lời bám sát nguồn.",
-            isCorrect: true
-          },
-          {
-            id: "C",
-            text: "<strong>RAG thay thế hoàn toàn mô hình ngôn ngữ</strong> bằng một công cụ tìm kiếm SQL cơ sở dữ liệu truyền thống.",
-            isCorrect: false,
-            misconceptionTitle: "Phát hiện ngộ nhận: RAG không thay thế mô hình ngôn ngữ",
-            userSummary: "RAG vẫn dùng LLM để đọc hiểu và tổng hợp văn phong, chỉ bổ sung thêm công đoạn tìm kiếm tài liệu đưa vào prompt."
-          }
-        ],
-        hint: "Hãy thử suy nghĩ: Mô hình ngôn ngữ có nhất thiết phải thay đổi trọng số (weights) bên trong thì mới trả lời được không? Nếu bạn cung cấp tài liệu ngay trong câu hỏi (cửa sổ ngữ cảnh - context window) giống như cho học sinh mở sách khi làm bài, thì đó là cơ chế gì?",
-        source: "Tài liệu VLearn AI Base · Khái niệm Context Injection & Retrieval",
-        correctFeedback: "Chính xác! RAG không huấn luyện lại mô hình (không tốn chi phí và thời gian fine-tune). Thay vào đó, nó tìm kiếm tài liệu mới tại thời điểm truy vấn rồi đưa thẳng vào Prompt (Context Window) để LLM đọc và trả lời bám sát nguồn.",
-        defaultMisconceptionText: "Em nghĩ khi công ty có văn bản mới thì mình phải nạp văn bản đó vào để huấn luyện lại các tham số của mô hình thì nó mới nhớ được lâu dài.",
-        defaultCorrectText: "RAG chỉ tra cứu tài liệu lúc người dùng hỏi rồi nhét vào ngữ cảnh cho mô hình đọc, không train lại mô hình.",
-        defaultRetryText: "RAG không phải là train lại mô hình vì train lại rất tốn kém và lâu. RAG giống như việc tra cứu tài liệu quy chế mới rồi copy đính kèm vào câu hỏi để LLM đọc và trả lời luôn."
-      },
-      {
-        id: 2,
-        indexLabel: "CÂU HỎI 2 / 2",
-        stepTag: "BƯỚC II / V · CÂU HỎI 2 / 2",
-        progressBadge: "Tiến độ: Câu 2 / 2",
-        concept: "Kỹ thuật RAG: Giới hạn Context Window & Chunking",
-        question: "Tài liệu quy chế nội bộ của công ty dài tới 100 trang A4 (~40.000 từ). Khi người dùng hỏi một điều khoản nhỏ, cơ chế RAG sẽ xử lý văn bản 100 trang này như thế nào để đưa vào cho LLM trả lời?",
-        choices: [
-          {
-            id: "A",
-            text: "<strong>Nhồi nhét toàn bộ 100 trang văn bản</strong> vào thẳng Prompt một lúc để mô hình đọc đầy đủ nhất có thể.",
-            isCorrect: false,
-            misconceptionTitle: "Phát hiện điểm nghẽn: Ngộ nhận Context Window vô hạn và hiện tượng nhiễu thông tin",
-            userSummary: "Nhồi nhét cả 100 trang sẽ làm tràn context window, tốn kém chi phí token rất lớn và khiến LLM dễ bị ảo giác hoặc bỏ sót thông tin ở giữa (hiện tượng Lost in the middle)."
-          },
-          {
-            id: "B",
-            text: "<strong>Chia nhỏ tài liệu thành các đoạn (Chunking)</strong>, dùng Vector Search chỉ trích xuất đúng 2-3 đoạn liên quan nhất (Top-k) để đưa vào Prompt.",
-            isCorrect: true
-          },
-          {
-            id: "C",
-            text: "<strong>Mã hóa 100 trang thành file zip</strong> rồi gửi link cho LLM tự tải về giải nén.",
-            isCorrect: false,
-            misconceptionTitle: "Phát hiện ngộ nhận: LLM không tự tải và giải nén file ngoài môi trường",
-            userSummary: "LLM thuần túy chỉ nhận văn bản dạng chuỗi ký tự (text tokens) trong context window, không tự chạy thao tác giải nén file zip."
-          }
-        ],
-        hint: "Hãy thử suy nghĩ: Cửa sổ ngữ cảnh (Context Window) của LLM có giới hạn và xử lý văn bản quá dài rất tốn chi phí lẫn dễ bị phân tâm. Nếu người dùng chỉ hỏi 1 câu nhỏ, việc cắt nhỏ tài liệu và chỉ lấy đúng đoạn văn liên quan nhất (Top-k chunks) sẽ giúp ích gì?",
-        source: "Tài liệu VLearn AI Base · Section 3.2: Chunking & Vector Similarity Search",
-        correctFeedback: "Rất chính xác! Trong thực tế, kỹ thuật RAG luôn đi kèm 'Chunking' (chia nhỏ) và 'Top-k Retrieval'. Ta không nhét cả 100 trang vào prompt mà chỉ nhét các đoạn có độ tương đồng cao nhất với câu hỏi để tiết kiệm token và tránh nhiễu.",
-        defaultMisconceptionText: "Em nghĩ cứ copy hết 100 trang vào prompt cho AI đọc từ đầu đến cuối là chắc chắn không bị thiếu ý.",
-        defaultCorrectText: "Không nên nhét cả 100 trang vì sẽ tràn context window và làm AI bị nhiễu. Cần chia nhỏ (chunking) và chỉ lấy 2-3 đoạn sát nhất đưa vào prompt.",
-        defaultRetryText: "Không thể nhét 100 trang vào prompt vì tràn ngữ cảnh và tốn tiền. Cần chia nhỏ tài liệu thành các đoạn chunk rồi dùng vector search tìm đúng đoạn liên quan đưa vào."
-      }
-    ];
-
     let currentQuestionIdx = 0; // 0 = Question 1, 1 = Question 2
     let currentStep = 1;
-    let selectedChoice = 'A';
-    let currentScenario = 'sufficient';
+    let activeQuestion = '';
+    let learningSessionId = null;
+    let backendMode = 'live';
+    let currentCitationSources = [];
+    let lessonQuestions = [];
+    let loadingTimer = null;
+
+    const loadingMessages = [
+      'Đang đọc cách bạn suy luận...',
+      'Đang tạo rubric riêng cho câu hỏi này...',
+      'Đang đối chiếu từng giả định với tài liệu bài học...',
+      'Đang chọn gợi ý vừa đủ để bạn vẫn phải tự suy nghĩ...',
+      'Đang kiểm tra nguồn trích dẫn trước khi phản hồi...'
+    ];
+
+    function setLoading(isLoading) {
+      const overlay = document.getElementById('ai-loading');
+      const message = document.getElementById('ai-loading-message');
+      const buttons = [
+        document.getElementById('btn-submit-answer'),
+        document.getElementById('btn-verify-retry')
+      ].filter(Boolean);
+      buttons.forEach(button => { button.disabled = isLoading; });
+      clearInterval(loadingTimer);
+      loadingTimer = null;
+      if (!isLoading) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+        return;
+      }
+      let messageIndex = 0;
+      message.textContent = loadingMessages[messageIndex];
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      loadingTimer = setInterval(() => {
+        messageIndex = (messageIndex + 1) % loadingMessages.length;
+        message.textContent = loadingMessages[messageIndex];
+      }, 1800);
+    }
+
+    async function loadLesson() {
+      const response = await fetch('/api/lesson');
+      if (!response.ok) throw new Error('Không tải được nội dung bài học');
+      const lesson = await response.json();
+      lessonQuestions = lesson.questions || [];
+      if (!lessonQuestions.length) throw new Error('Bài học chưa có câu hỏi');
+      return lesson;
+    }
+
+    function renderCitationSources(sources) {
+      const list = document.getElementById('citation-list');
+      list.replaceChildren();
+      if (!sources.length) {
+        const empty = document.createElement('p');
+        empty.className = 'citation-text';
+        empty.textContent = 'Chưa có đoạn nguồn nào được gắn với lần phân tích này.';
+        list.appendChild(empty);
+        return;
+      }
+      sources.forEach(source => {
+        const item = document.createElement('article');
+        item.className = 'citation-item';
+        const id = document.createElement('div');
+        id.className = 'citation-id';
+        id.textContent = source.id;
+        const text = document.createElement('div');
+        text.className = 'citation-text';
+        text.textContent = source.text;
+        item.append(id, text);
+        list.appendChild(item);
+      });
+    }
+
+    async function openCitationModal() {
+      const modal = document.getElementById('citation-modal');
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      if (!currentCitationSources.length) {
+        try {
+          const response = await fetch('/api/sources');
+          if (!response.ok) throw new Error('Không tải được nguồn');
+          currentCitationSources = (await response.json()).sources || [];
+        } catch (error) {
+          console.warn(error);
+        }
+      }
+      renderCitationSources(currentCitationSources);
+    }
+
+    function closeCitationModal(event) {
+      if (event && event.target !== event.currentTarget) return;
+      document.getElementById('citation-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    async function ensureLearningSession() {
+      if (learningSessionId) return learningSessionId;
+      const response = await fetch('/api/session', { method: 'POST' });
+      if (!response.ok) throw new Error('Không tạo được phiên học');
+      const data = await response.json();
+      learningSessionId = data.session_id;
+      return learningSessionId;
+    }
+
+    async function analyzeWithAI(question, answer, reasoning) {
+      const sessionId = await ensureLearningSession();
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          question,
+          selected_answer: answer,
+          reasoning
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || 'AI chưa phản hồi được');
+      backendMode = data.mode || 'live';
+      return data;
+    }
+
+    async function saveLearningAttempt(stage, question, reasoning) {
+      if (!learningSessionId) return;
+      try {
+        await fetch('/api/attempt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ session_id: learningSessionId, stage, question, reasoning })
+        });
+      } catch (error) {
+        console.warn('Không lưu được attempt', error);
+      }
+    }
 
     // Switch between Interactive Mockup and Flowchart Diagram
     function switchMainView(mode) {
@@ -2826,146 +2920,111 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Load Question into Screen 2
+    // Load a teacher-authored question from the lesson; the learner answers freely.
     function renderQuestion(idx) {
+      if (!lessonQuestions.length) return;
       currentQuestionIdx = idx;
-      const q = questionsData[idx];
-
-      // Update question text and headers
-      document.getElementById('quiz-step-tag').textContent = q.stepTag;
-      document.getElementById('quiz-breadcrumb-tag').textContent = q.concept.split(':')[1] || q.concept;
-      document.getElementById('quiz-progress-badge').textContent = q.progressBadge;
-      document.getElementById('question-concept-tag').textContent = q.concept;
-      document.getElementById('question-text-el').textContent = q.question;
-
-      // Update choices
-      document.getElementById('choice-text-A').innerHTML = q.choices[0].text;
-      document.getElementById('choice-text-B').innerHTML = q.choices[1].text;
-      document.getElementById('choice-text-C').innerHTML = q.choices[2].text;
-
-      // Reset selection
-      selectChoice('A');
-      fillPreset('misconception');
-    }
-
-    // Choice selection
-    function selectChoice(letter) {
-      selectedChoice = letter;
-      ['A', 'B', 'C'].forEach(l => {
-        const el = document.getElementById(`choice-${l}`);
-        if (el) el.classList.toggle('selected', l === letter);
-      });
-    }
-
-    // Presets
-    function fillPreset(type) {
-      const q = questionsData[currentQuestionIdx];
-      const textarea = document.getElementById('user-explanation');
-
-      if (type === 'misconception') {
-        selectChoice('A');
-        textarea.value = q.defaultMisconceptionText;
-        setScenario('sufficient');
-      } else if (type === 'correct') {
-        selectChoice('B');
-        textarea.value = q.defaultCorrectText;
-      } else {
-        selectChoice('C');
-        textarea.value = "Em thấy câu này khó quá, chọn bừa thôi chứ chưa hiểu gì ạ.";
-        setScenario('insufficient');
-      }
-    }
-
-    // Scenario changer
-    function changeScenario(val) {
-      setScenario(val);
-      if (currentStep === 3) {
-        goToStep(3);
-      }
-    }
-
-    function setScenario(scen) {
-      currentScenario = scen;
-      const selector = document.getElementById('scenario-selector');
-      if (selector) selector.value = scen;
-    }
-
-    // Simulate feedback directly for testing
-    function simulateFeedback(type) {
-      if (type === 'correct') {
-        selectChoice('B');
-        submitStep2();
-      } else if (type === 'wrong') {
-        selectChoice('A');
-        document.getElementById('user-explanation').value = questionsData[currentQuestionIdx].defaultMisconceptionText;
-        submitStep2();
-      } else {
-        selectChoice('C');
-        document.getElementById('user-explanation').value = "Khó quá em không biết";
-        submitStep2();
-      }
+      const question = lessonQuestions[idx] || lessonQuestions[0];
+      activeQuestion = question.text;
+      document.getElementById('quiz-step-tag').textContent = `BƯỚC II / V · CÂU HỎI ${idx + 1} / ${lessonQuestions.length}`;
+      document.getElementById('quiz-breadcrumb-tag').textContent = question.concept;
+      document.getElementById('quiz-progress-badge').textContent = `Tiến độ: Câu ${idx + 1} / ${lessonQuestions.length}`;
+      document.getElementById('question-concept-tag').textContent = `Khái niệm: ${question.concept}`;
+      document.getElementById('lesson-question-text').textContent = question.text;
+      document.getElementById('user-explanation').value = '';
     }
 
     // Submit Step 2 & Check Right/Wrong
-    function submitStep2() {
-      const q = questionsData[currentQuestionIdx];
-      const chosenChoiceObj = q.choices.find(c => c.id === selectedChoice);
+    async function submitStep2() {
+      const question = activeQuestion;
       const text = document.getElementById('user-explanation').value.trim();
 
       const elCorrect = document.getElementById('ai-result-correct');
       const elSuff = document.getElementById('ai-result-sufficient');
       const elInsuff = document.getElementById('ai-result-insufficient');
 
-      // Check if user answered vague / insufficient
-      if (text.toLowerCase().includes('khó quá') || text.toLowerCase().includes('chọn bừa') || text.length < 15) {
-        elCorrect.style.display = 'none';
-        elSuff.style.display = 'none';
-        elInsuff.style.display = 'block';
-        document.getElementById('clarify-text').textContent = q.hint;
+      if (!question) {
+        alert('Câu hỏi bài học chưa tải xong. Vui lòng thử lại.');
+        return;
       }
-      // Check if user answered CORRECT (Option B)
-      else if (chosenChoiceObj && chosenChoiceObj.isCorrect) {
-        elCorrect.style.display = 'block';
-        elSuff.style.display = 'none';
-        elInsuff.style.display = 'none';
+      if (!text) {
+        alert('Hãy viết cách hiểu hiện tại của bạn trước khi gửi.');
+        return;
+      }
+      try {
+        setLoading(true);
+        const ai = await analyzeWithAI(question, null, text);
+        currentCitationSources = ai.sources || [];
 
-        document.getElementById('correct-feedback-desc').textContent = q.correctFeedback;
-        document.getElementById('correct-source-tag').textContent = q.source;
-
-        // Button label for next step
-        const nextBtn = document.getElementById('btn-next-q-from-correct');
-        if (currentQuestionIdx === 0) {
-          nextBtn.textContent = "Qua câu tiếp theo → (Câu 2 / 2)";
+        if (ai.decision === 'CLARIFY' || ai.decision === 'DECLINE') {
+          elCorrect.style.display = 'none';
+          elSuff.style.display = 'none';
+          elInsuff.style.display = 'block';
+          document.getElementById('clarify-text').textContent = ai.clarifying_question || ai.explanation;
+        } else if (ai.decision === 'VERIFY') {
+          elCorrect.style.display = 'block';
+          elSuff.style.display = 'none';
+          elInsuff.style.display = 'none';
+          document.getElementById('correct-feedback-desc').textContent = `${ai.explanation} Hệ thống sẽ dùng câu tiếp theo để kiểm tra bạn hiểu thật hay chỉ chọn đúng.`;
+          document.getElementById('correct-source-tag').textContent = `Nguồn: ${(ai.source_ids || []).join(', ')} · ${backendMode.toUpperCase()}`;
+          const nextBtn = document.getElementById('btn-next-q-from-correct');
+          nextBtn.textContent = currentQuestionIdx < lessonQuestions.length - 1 ? 'Qua câu tiếp theo →' : 'Hoàn thành & Xem tổng kết →';
         } else {
-          nextBtn.textContent = "Hoàn thành bài luyện tập & Xem tổng kết →";
+          elCorrect.style.display = 'none';
+          elSuff.style.display = 'block';
+          elInsuff.style.display = 'none';
+          document.getElementById('wrong-detected-title').textContent = `Có một giả định cần kiểm tra lại trong phần ${ai.concept || 'lập luận'}`;
+          document.getElementById('wrong-user-summary').textContent = ai.evidence_from_student
+            ? `AI đang tập trung vào ý bạn vừa viết: “${ai.evidence_from_student}”`
+            : 'AI đã phát hiện một điểm chưa khớp với rubric, nhưng chưa tiết lộ kiến thức đúng để bạn có cơ hội tự sửa.';
+          document.getElementById('minimal-hint-text').textContent = ai.hint_level_1;
+          document.getElementById('hint-source-text').textContent = `Nguồn: ${(ai.source_ids || []).join(', ')} · Confidence ${Math.round((ai.confidence || 0) * 100)}% · ${backendMode.toUpperCase()}`;
+          document.getElementById('retry-hint-display').innerHTML = `<em>"${ai.hint_level_1}"</em>`;
+          document.getElementById('retry-explanation').value = '';
+          document.getElementById('retry-success-box').style.display = 'none';
+          document.getElementById('retry-next-container').style.display = 'none';
+          document.getElementById('btn-verify-retry').style.display = 'inline-flex';
         }
+        goToStep(3);
+        return;
+      } catch (error) {
+        console.error('Không phân tích được câu trả lời:', error);
+        alert(`Chưa thể phân tích bằng AI: ${error.message}. Vui lòng kiểm tra backend rồi thử lại.`);
+        return;
+      } finally {
+        setLoading(false);
       }
-      // User answered INCORRECT (Option A or C) - Track D2 Misconception
-      else {
-        elCorrect.style.display = 'none';
-        elSuff.style.display = 'block';
-        elInsuff.style.display = 'none';
-
-        document.getElementById('wrong-detected-title').textContent = chosenChoiceObj.misconceptionTitle || "Phát hiện điểm nghẽn nhận thức";
-        document.getElementById('wrong-user-summary').textContent = chosenChoiceObj.userSummary || "Bạn đang có sự nhầm lẫn về khái niệm.";
-        document.getElementById('minimal-hint-text').textContent = q.hint;
-        document.getElementById('hint-source-text').textContent = q.source;
-
-        // Prepare retry screen
-        document.getElementById('retry-hint-display').innerHTML = `<em>"${q.hint}"</em>`;
-        document.getElementById('retry-explanation').value = q.defaultRetryText;
-        document.getElementById('retry-success-box').style.display = 'none';
-        document.getElementById('retry-next-container').style.display = 'none';
-        document.getElementById('btn-verify-retry').style.display = 'inline-flex';
-      }
-
-      goToStep(3);
     }
 
     // Submit Step 4 (Retry)
-    function submitRetry() {
-      const q = questionsData[currentQuestionIdx];
+    async function submitRetry() {
       const retryText = document.getElementById('retry-explanation').value.trim();
+
+      if (retryText.length < 15) {
+        alert('Hãy giải thích lại bằng ít nhất một câu đầy đủ.');
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const ai = await analyzeWithAI(activeQuestion, null, retryText);
+        if (ai.decision !== 'VERIFY') {
+          const box = document.getElementById('retry-success-box');
+          box.style.display = 'block';
+          box.querySelector('.result-badge').textContent = 'CHƯA ĐỦ BẰNG CHỨNG ĐÃ HIỂU';
+          box.querySelector('.result-title').textContent = ai.explanation;
+          box.querySelector('.result-desc').textContent = ai.clarifying_question || ai.hint_level_1 || 'Hãy diễn đạt lại rõ hơn.';
+          document.getElementById('retry-next-container').style.display = 'none';
+          return;
+        }
+        await saveLearningAttempt('retry', activeQuestion, retryText);
+      } catch (error) {
+        console.error('Không đánh giá được lần sửa bằng backend:', error);
+        alert(`Chưa thể xác nhận lần sửa bằng AI: ${error.message}. Vui lòng thử lại.`);
+        return;
+      } finally {
+        setLoading(false);
+      }
 
       // Update final comparison in Step 5
       if (currentQuestionIdx === 0) {
@@ -2982,14 +3041,18 @@
 
       // Show success notification on screen 4
       document.getElementById('retry-success-box').style.display = 'block';
+      const successBox = document.getElementById('retry-success-box');
+      successBox.querySelector('.result-badge').textContent = 'CÓ BẰNG CHỨNG BAN ĐẦU ĐÃ TỰ SỬA';
+      successBox.querySelector('.result-title').textContent = 'Cách giải thích mới đã vượt qua rubric của bài luyện.';
+      successBox.querySelector('.result-desc').textContent = 'Kết quả này chưa phải điểm số chính thức; câu tiếp theo dùng để kiểm tra khả năng chuyển giao.';
       document.getElementById('btn-verify-retry').style.display = 'none';
 
       const nextContainer = document.getElementById('retry-next-container');
       const nextBtn = document.getElementById('btn-next-q-from-retry');
       nextContainer.style.display = 'block';
 
-      if (currentQuestionIdx === 0) {
-        nextBtn.textContent = "Qua câu tiếp theo → (Câu 2 / 2)";
+      if (currentQuestionIdx < lessonQuestions.length - 1) {
+        nextBtn.textContent = "Qua câu tiếp theo →";
       } else {
         nextBtn.textContent = "Hoàn thành bài luyện tập & Xem tổng kết →";
       }
@@ -2997,9 +3060,8 @@
 
     // Transition to Next Question or Final Step
     function goToNextQuestion() {
-      if (currentQuestionIdx === 0) {
-        // Move to Question 2
-        renderQuestion(1);
+      if (currentQuestionIdx < lessonQuestions.length - 1) {
+        renderQuestion(currentQuestionIdx + 1);
         goToStep(2);
       } else {
         // Finished both questions -> Move to Step 5
@@ -3019,8 +3081,17 @@
     }
 
     // Default init on page load
-    window.addEventListener('DOMContentLoaded', () => {
-      renderQuestion(0);
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        await loadLesson();
+        renderQuestion(0);
+      } catch (error) {
+        console.error(error);
+        document.getElementById('lesson-question-text').textContent = 'Không tải được câu hỏi. Hãy kiểm tra backend và tải lại trang.';
+      }
+    });
+    window.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeCitationModal();
     });
   </script>
 </body>

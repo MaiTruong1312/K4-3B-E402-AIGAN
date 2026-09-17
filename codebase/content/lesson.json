@@ -1,0 +1,40 @@
+{
+  "lesson_id": "foundation-rag",
+  "title": "RAG và context window",
+  "scope": "Khái niệm RAG, khác biệt với fine-tuning, context injection, context window và cách chọn phần tài liệu liên quan.",
+  "questions": [
+    {
+      "id": "rag-new-policy",
+      "concept": "RAG và Fine-tuning",
+      "text": "Một công ty vừa ban hành quy chế nội bộ mới vào sáng nay. Vì sao mô hình LLM mặc định chưa biết quy chế này, và RAG can thiệp như thế nào?"
+    },
+    {
+      "id": "rag-context-quality",
+      "concept": "Context window và chọn lọc tài liệu",
+      "text": "Vì sao đưa càng nhiều tài liệu vào context chưa chắc làm câu trả lời tốt hơn, và hệ thống RAG nên xử lý thế nào?"
+    }
+  ],
+  "sources": [
+    {
+      "id": "T03-036",
+      "text": "RAG truy xuất thông tin nội bộ liên quan và đưa nội dung chứa câu trả lời vào ngữ cảnh để LLM reasoning; nếu không có RAG có thể phải cân nhắc fine-tuning."
+    },
+    {
+      "id": "T03-119",
+      "text": "Với chatbot và agent, RAG cùng prompt engineering thường được ưu tiên trước fine-tuning; fine-tuning tốn dữ liệu, validation và có đánh đổi về khả năng tổng quát."
+    },
+    {
+      "id": "T06-139",
+      "text": "RAG là retrieval augmented: tăng cường dữ liệu để khi cần có thể truy xuất và trả lời kèm citation."
+    },
+    {
+      "id": "T04-051",
+      "text": "Context window là lượng thông tin mô hình có thể tiếp nhận trong một lần; khi tài liệu vượt giới hạn phải cắt nhỏ và xử lý."
+    },
+    {
+      "id": "T04-053",
+      "text": "Nhiều context không đảm bảo tốt hơn; cần đưa đúng thông tin chất lượng để mô hình chú ý đúng phần quan trọng."
+    }
+  ],
+  "allowed_decisions": ["DIAGNOSE", "CLARIFY", "VERIFY", "DECLINE"]
+}
