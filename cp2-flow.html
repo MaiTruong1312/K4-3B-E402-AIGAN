@@ -1,0 +1,2758 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VLearn International Academy | CP2 - Luồng Hoạt Động (Track D2)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ========================================================= */
+    /* DESIGN SYSTEM: ELITE INTERNATIONAL ACADEMY (MONOCHROME)   */
+    /* STARK WHITE BACKGROUND, BLACK DETAILS, ZERO RADIUS        */
+    /* ========================================================= */
+    :root {
+      --bg-page: #ffffff;
+      --bg-card: #ffffff;
+      --bg-subtle: #fafafa;
+      --bg-subtle-2: #f4f4f4;
+      --bg-black: #000000;
+      
+      --black: #000000;
+      --black-rich: #0a0a0a;
+      --charcoal: #1f1f1f;
+      --steel: #404040;
+      --text-muted: #595959;
+      --text-light: #737373;
+      
+      --border-solid: #000000;
+      --border-bold: 2px solid #000000;
+      --border-thin: 1px solid #000000;
+      --border-hairline: 1px solid #e0e0e0;
+      --border-mid: 1px solid #8c8c8c;
+      
+      --shadow-crisp: 3px 3px 0px #000000;
+      --shadow-crisp-lg: 5px 5px 0px #000000;
+      --shadow-crisp-sm: 2px 2px 0px #000000;
+    }
+
+    /* STRICT GEOMETRIC ANGULAR RULES - NO ROUNDED CORNERS ANYWHERE */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0px !important;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--black);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* TYPOGRAPHY HIERARCHY */
+    h1, h2, h3, h4, .serif-font {
+      font-family: 'Playfair Display', Georgia, serif;
+      letter-spacing: -0.015em;
+      color: var(--black);
+      font-weight: 700;
+    }
+
+    .academic-serif, .vlearn-logo-text, .academic-title, .track-badge, .cp2-badge, .card-title, .meta-tag, .f-role, .step-tag, .btn-academic, .roman-num {
+      font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ========================================================= */
+    /* TOP CONTROL BAR (HACKATHON EVALUATION CONTROLS)            */
+    /* ========================================================= */
+    .hackathon-bar {
+      background: var(--black);
+      color: #ffffff;
+      padding: 10px 32px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--black);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      letter-spacing: 0.08em;
+    }
+    .hackathon-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .cp2-badge {
+      background: #ffffff;
+      color: var(--black);
+      font-weight: 900;
+      font-size: 10px;
+      padding: 4px 10px;
+      border: 1px solid #ffffff;
+      letter-spacing: 0.16em;
+    }
+    .track-badge {
+      background: transparent;
+      color: #ffffff;
+      font-size: 10px;
+      padding: 4px 10px;
+      border: 1px solid #ffffff;
+      font-weight: 700;
+    }
+    .hackathon-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .view-switch-btn {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid #ffffff;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.15s ease;
+    }
+    .view-switch-btn:hover {
+      background: #222222;
+    }
+    .view-switch-btn.active {
+      background: #ffffff;
+      color: var(--black);
+      border-color: #ffffff;
+      font-weight: 800;
+    }
+
+    /* STEP NAVIGATION PILL BAR */
+    .step-nav-wrapper {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-solid);
+      padding: 10px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      overflow-x: auto;
+    }
+    .step-nav-list {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      list-style: none;
+    }
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: #ffffff;
+      cursor: pointer;
+      border: 1px solid var(--border-hairline);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .step-pill:hover {
+      border-color: var(--black);
+      color: var(--black);
+    }
+    .step-pill.active {
+      background: var(--black);
+      color: #ffffff;
+      border-color: var(--black);
+    }
+    .step-pill.done {
+      background: var(--bg-subtle);
+      color: var(--black);
+      border-color: var(--black);
+    }
+    .step-pill .num {
+      width: 18px;
+      height: 18px;
+      background: #eeeeee;
+      color: var(--black);
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 800;
+      border: 1px solid var(--black);
+    }
+    .step-pill.active .num {
+      background: #ffffff;
+      color: var(--black);
+      border-color: #ffffff;
+    }
+    .step-pill.done .num {
+      background: var(--black);
+      color: #ffffff;
+      border-color: var(--black);
+    }
+    .step-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .step-nav-right select {
+      background: #ffffff;
+      color: var(--black);
+      border: 1px solid var(--border-solid);
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* ========================================================= */
+    /* VLEARN INTERNATIONAL ACADEMY HEADER                        */
+    /* ========================================================= */
+    .vlearn-header {
+      background: #ffffff;
+      border-bottom: 2px solid var(--black);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 74px;
+    }
+    .vlearn-left {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+    }
+    .vlearn-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .vlearn-logo-icon {
+      width: 38px;
+      height: 38px;
+      border: 2px solid var(--black);
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      box-shadow: 2px 2px 0px #000000;
+    }
+    .vlearn-logo-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+    .vlearn-logo-text {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: 0.16em;
+      line-height: 1;
+    }
+    .vlearn-logo-sub {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+    .vlearn-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+    .vlearn-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 26px 0;
+      position: relative;
+      cursor: pointer;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .vlearn-nav-item:hover {
+      color: var(--black);
+    }
+    .vlearn-nav-item.active {
+      color: var(--black);
+      font-weight: 800;
+    }
+    .vlearn-nav-item.active::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--black);
+    }
+    .vlearn-nav-badge {
+      font-size: 9px;
+      padding: 2px 6px;
+      border: 1px solid var(--black);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .badge-soon {
+      background: #ffffff;
+      color: var(--text-muted);
+      border-color: #999999;
+    }
+    .badge-new {
+      background: var(--black);
+      color: #ffffff;
+      border-color: var(--black);
+    }
+    .vlearn-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .lang-toggle {
+      display: flex;
+      border: 1px solid var(--black);
+      background: #ffffff;
+      padding: 0;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+    .lang-opt {
+      padding: 5px 9px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .lang-opt.active {
+      background: var(--black);
+      color: #ffffff;
+    }
+    .icon-btn {
+      background: transparent;
+      border: 1px solid var(--black);
+      color: var(--black);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      transition: all 0.15s;
+    }
+    .icon-btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--black);
+      background: var(--black);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* ========================================================= */
+    /* LAYOUT & MAIN CONTAINER                                   */
+    /* ========================================================= */
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 36px 32px 70px;
+    }
+
+    .screen-view {
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .screen-view.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========================================================= */
+    /* SCREEN 1: DASHBOARD ACADEMIC HERO                         */
+    /* ========================================================= */
+    .hero-welcome {
+      margin-bottom: 34px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--black);
+    }
+    .hero-meta-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .institutional-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      padding: 4px 10px;
+      border: 1px solid var(--black);
+      background: #ffffff;
+      color: var(--black);
+      text-transform: uppercase;
+    }
+    .institutional-badge.filled {
+      background: var(--black);
+      color: #ffffff;
+    }
+    .hero-title {
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 12px;
+      line-height: 1.15;
+    }
+    .hero-sub {
+      color: var(--charcoal);
+      font-size: 15px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .hero-desc-text {
+      max-width: 820px;
+      line-height: 1.65;
+    }
+    .hero-cta-btn {
+      background: var(--black);
+      color: #ffffff;
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 14px 26px;
+      border: 1px solid var(--black);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-crisp);
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .hero-cta-btn:hover {
+      background: #1f1f1f;
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #000000;
+    }
+
+    /* DASHBOARD GRID */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 32px;
+    }
+    @media (max-width: 960px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* CARDS */
+    .card-box {
+      background: #ffffff;
+      border: 1px solid var(--black);
+      padding: 28px;
+      box-shadow: var(--shadow-crisp);
+    }
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--black);
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      color: var(--black);
+    }
+    .card-link {
+      color: var(--black);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--black);
+    }
+    .card-link:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+    .card-tabs {
+      display: flex;
+      gap: 24px;
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      padding: 8px 0 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .tab-btn.active {
+      color: var(--black);
+      border-bottom-color: var(--black);
+      font-weight: 800;
+    }
+
+    /* LESSON LIST */
+    .lesson-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .lesson-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border: 1px solid var(--black);
+      background: #ffffff;
+      transition: all 0.15s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .lesson-row:hover {
+      background: var(--bg-subtle);
+      transform: translate(-1px, -1px);
+      box-shadow: 2px 2px 0px #000000;
+    }
+    .lesson-row.highlight {
+      border: 2px solid var(--black);
+      background: #ffffff;
+      box-shadow: var(--shadow-crisp);
+    }
+    .lesson-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .lesson-circle {
+      width: 26px;
+      height: 26px;
+      border: 1px solid var(--black);
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 800;
+      background: #ffffff;
+      color: var(--black);
+    }
+    .lesson-row.highlight .lesson-circle {
+      background: var(--black);
+      color: #ffffff;
+    }
+    .lesson-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+    }
+    .lesson-subtext {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+    .lesson-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border: 1px solid var(--black);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .badge-in-progress {
+      background: #ffffff;
+      color: var(--black);
+    }
+    .badge-featured {
+      background: var(--black);
+      color: #ffffff;
+    }
+
+    /* SIDEBAR MODULES */
+    .sidebar-col {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .sidebar-card {
+      background: #ffffff;
+      border: 1px solid var(--black);
+      padding: 24px;
+      box-shadow: var(--shadow-crisp);
+    }
+    .sidebar-card.black-card {
+      background: var(--black);
+      color: #ffffff;
+    }
+    .sidebar-title {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      margin-bottom: 14px;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-card.black-card .sidebar-title {
+      color: #ffffff;
+    }
+    .streak-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 13px;
+      color: #cccccc;
+    }
+    .streak-btn {
+      background: #ffffff;
+      color: var(--black);
+      border: 1px solid #ffffff;
+      padding: 8px 14px;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.15s;
+    }
+    .streak-btn:hover {
+      background: #dddddd;
+    }
+    .weakness-body {
+      color: var(--charcoal);
+      font-size: 13px;
+      background: var(--bg-subtle);
+      padding: 16px;
+      border: 1px solid var(--black);
+      line-height: 1.6;
+    }
+
+    /* D2 INSTITUTIONAL CALLOUT */
+    .d2-callout {
+      margin-top: 24px;
+      background: #ffffff;
+      border: 2px solid var(--black);
+      padding: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      box-shadow: var(--shadow-crisp);
+    }
+    .d2-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--black);
+      background: var(--black);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      font-weight: 800;
+      flex-shrink: 0;
+      font-family: 'Cinzel', serif;
+    }
+    .d2-content h4 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+    .d2-content p {
+      font-size: 13px;
+      color: var(--charcoal);
+      margin-bottom: 14px;
+      line-height: 1.65;
+    }
+    .d2-btn {
+      background: var(--black);
+      color: #ffffff;
+      border: 1px solid var(--black);
+      padding: 9px 18px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-crisp-sm);
+      transition: all 0.15s;
+    }
+    .d2-btn:hover {
+      background: #1f1f1f;
+    }
+
+    /* ========================================================= */
+    /* SCREENS 2, 3, 4, 5 (FLOW SCREENS - HIGH-END ACADEMY)     */
+    /* ========================================================= */
+    .flow-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--black);
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .flow-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    .flow-breadcrumb a {
+      color: var(--black);
+      text-decoration: none;
+      cursor: pointer;
+      border-bottom: 1px solid var(--black);
+    }
+    .step-tag {
+      background: #ffffff;
+      color: var(--black);
+      border: 1px solid var(--black);
+      padding: 5px 12px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+    }
+
+    .flow-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 34px;
+    }
+    @media (max-width: 900px) {
+      .flow-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .main-panel {
+      background: #ffffff;
+      border: 1px solid var(--black);
+      padding: 36px;
+      box-shadow: var(--shadow-crisp-lg);
+    }
+    .flow-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 10px;
+      line-height: 1.25;
+    }
+    .flow-desc {
+      color: var(--charcoal);
+      font-size: 14px;
+      margin-bottom: 28px;
+      line-height: 1.65;
+      padding-bottom: 18px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    /* QUESTION BOX */
+    .question-box {
+      background: #ffffff;
+      border: 1px solid var(--black);
+      padding: 24px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-crisp);
+    }
+    .question-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--black);
+    }
+    .meta-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--black);
+    }
+    .no-score-badge {
+      background: #ffffff;
+      color: var(--black);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border: 1px solid var(--black);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .question-text {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--black);
+      line-height: 1.55;
+    }
+
+    /* CHOICES */
+    .choice-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .choice-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 18px;
+      border: 1px solid var(--black);
+      background: #ffffff;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .choice-item:hover {
+      background: var(--bg-subtle);
+      transform: translate(-1px, -1px);
+      box-shadow: 2px 2px 0px #000000;
+    }
+    .choice-item.selected {
+      border: 2px solid var(--black);
+      background: #ffffff;
+      box-shadow: var(--shadow-crisp);
+    }
+    .choice-letter {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--black);
+      background: #ffffff;
+      color: var(--black);
+      display: grid;
+      place-items: center;
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .choice-item.selected .choice-letter {
+      background: var(--black);
+      color: #ffffff;
+    }
+    .choice-content {
+      font-size: 14px;
+      color: var(--charcoal);
+      line-height: 1.55;
+    }
+
+    /* EXPLANATION SECTION */
+    .explain-section {
+      margin-bottom: 30px;
+    }
+    .explain-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--black);
+      margin-bottom: 6px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-family: 'Cinzel', serif;
+    }
+    .explain-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .explain-textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 14px;
+      border: 1px solid var(--black);
+      outline: none;
+      transition: border-color 0.15s;
+      resize: vertical;
+      color: var(--black);
+      background: #ffffff;
+    }
+    .explain-textarea:focus {
+      border: 2px solid var(--black);
+      box-shadow: 2px 2px 0px #000000;
+    }
+
+    /* PRESETS */
+    .preset-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .preset-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-family: 'Cinzel', serif;
+    }
+    .preset-btn {
+      background: #ffffff;
+      border: 1px solid var(--black);
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--black);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: all 0.15s;
+    }
+    .preset-btn:hover {
+      background: var(--black);
+      color: #ffffff;
+    }
+
+    /* BUTTONS */
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: var(--black);
+      color: #ffffff;
+      border: 1px solid var(--black);
+      padding: 13px 26px;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-crisp);
+      transition: all 0.15s;
+    }
+    .btn-primary:hover {
+      background: #1f1f1f;
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #000000;
+    }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--black);
+      border: 1px solid var(--black);
+      padding: 13px 22px;
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: all 0.15s;
+    }
+    .btn-secondary:hover {
+      background: var(--bg-subtle);
+      border-color: var(--black);
+    }
+
+    /* SPEC CARDS (ASIDE) */
+    .flow-aside {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .spec-card {
+      background: #ffffff;
+      border: 1px solid var(--black);
+      padding: 22px;
+      box-shadow: var(--shadow-crisp);
+    }
+    .spec-card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: var(--black);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--black);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .spec-card-body {
+      font-size: 13px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+    .spec-card-body strong {
+      color: var(--black);
+    }
+
+    /* ========================================================= */
+    /* RESULT STATUS BANNERS (FORMAL & SOPHISTICATED MONOCHROME) */
+    /* ========================================================= */
+    .result-status-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 22px 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--black);
+      box-shadow: var(--shadow-crisp);
+      background: #ffffff;
+    }
+    .status-correct {
+      border-left: 6px solid var(--black);
+    }
+    .status-wrong {
+      border-left: 6px solid var(--black);
+    }
+    .result-icon {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--black);
+      background: var(--black);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 900;
+      flex-shrink: 0;
+      font-family: 'Cinzel', serif;
+    }
+    .result-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: var(--black);
+    }
+    .result-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+    .result-desc {
+      font-size: 13px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* AI DECISION / FEEDBACK CARD */
+    .ai-decision-card {
+      border: 1px solid var(--black);
+      padding: 26px;
+      margin-bottom: 24px;
+      background: #ffffff;
+      box-shadow: var(--shadow-crisp);
+    }
+    .decision-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .decision-icon {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--black);
+      background: var(--black);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 800;
+      flex-shrink: 0;
+      font-family: 'Cinzel', serif;
+    }
+    .decision-badge {
+      font-family: 'Cinzel', serif;
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid var(--black);
+      margin-bottom: 6px;
+      color: var(--black);
+    }
+    .decision-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    /* MINIMAL HINT BOX (SCHOLARLY CITATION STYLE) */
+    .hint-highlight-box {
+      background: var(--bg-subtle);
+      border: 1px solid var(--black);
+      border-left: 5px solid var(--black);
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    .hint-highlight-label {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hint-highlight-text {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--black);
+      line-height: 1.65;
+    }
+
+    /* SOURCE CITATION */
+    .source-box {
+      background: #ffffff;
+      border: 1px solid var(--black);
+      padding: 14px 18px;
+      font-size: 12px;
+      color: var(--charcoal);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .source-link {
+      color: var(--black);
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-decoration: underline;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+    }
+
+    /* COMPARISON GRID (SCREEN 5) */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 650px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .compare-col {
+      padding: 22px;
+      border: 1px solid var(--black);
+      background: #ffffff;
+      box-shadow: var(--shadow-crisp-sm);
+    }
+    .compare-before {
+      border-top: 4px solid var(--black);
+    }
+    .compare-after {
+      border-top: 4px solid var(--black);
+      background: var(--bg-subtle);
+    }
+    .compare-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--black);
+    }
+    .compare-text {
+      font-size: 13px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+
+    /* UNLOCK BANNER */
+    .unlock-banner {
+      background: var(--black);
+      color: #ffffff;
+      padding: 28px;
+      border: 1px solid var(--black);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+      box-shadow: var(--shadow-crisp);
+    }
+    .unlock-text h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    .unlock-text p {
+      font-size: 13px;
+      color: #cccccc;
+      line-height: 1.6;
+    }
+
+    /* ========================================================= */
+    /* VIEW 2: FLOWCHART BLUEPRINT DIAGRAM (ARCHITECTURAL)       */
+    /* ========================================================= */
+    .flowchart-container {
+      background: #ffffff;
+      border: 2px solid var(--black);
+      padding: 44px 36px;
+      box-shadow: var(--shadow-crisp-lg);
+    }
+    .flowchart-header {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--black);
+    }
+    .flowchart-header h2 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+    .flowchart-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .flow-steps-diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .f-node {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--black);
+      border-left: 6px solid var(--black);
+      padding: 22px 26px;
+      position: relative;
+      box-shadow: var(--shadow-crisp);
+      transition: all 0.15s;
+    }
+    .f-node:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #000000;
+    }
+    .f-node-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .f-role {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      padding: 3px 8px;
+      border: 1px solid var(--black);
+      background: #ffffff;
+      color: var(--black);
+    }
+    .f-action-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+    .f-action-desc {
+      font-size: 13px;
+      color: var(--charcoal);
+      line-height: 1.6;
+    }
+    .f-arrow {
+      color: var(--black);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .f-arrow span {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: -2px;
+    }
+
+    .f-branch-wrap {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+    @media (max-width: 720px) {
+      .f-branch-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+    .f-branch-card {
+      padding: 22px 24px;
+      border: 1px solid var(--black);
+      border-top: 5px solid var(--black);
+      background: #ffffff;
+      box-shadow: var(--shadow-crisp);
+    }
+    .f-branch-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: var(--black);
+    }
+
+    /* SPEC TABLE */
+    .flow-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 44px;
+      font-size: 13px;
+      border: 2px solid var(--black);
+    }
+    .flow-summary-table th, .flow-summary-table td {
+      padding: 14px 18px;
+      border: 1px solid var(--black);
+      text-align: left;
+    }
+    .flow-summary-table th {
+      background: var(--bg-subtle);
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+    .flow-summary-table td {
+      color: var(--charcoal);
+      line-height: 1.55;
+    }
+
+    /* FOOTER */
+    .vlearn-footer {
+      border-top: 2px solid var(--black);
+      padding: 28px;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: #ffffff;
+      margin-top: 60px;
+      font-family: 'Cinzel', serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= TOP HACKATHON CP2 CONTROL BAR ================= -->
+  <div class="hackathon-bar">
+    <div class="hackathon-info">
+      <span class="cp2-badge">CHECKPOINT CP2</span>
+      <span class="track-badge">TRACK D2 · HỌC TỪ LỖI TRƯỚC</span>
+      <span>HỌC VIỆN QUỐC TẾ VLEARN · NHÓM K4-3B-E402-AIGAN</span>
+    </div>
+    <div class="hackathon-actions">
+      <button class="view-switch-btn active" id="btn-mode-interactive" onclick="switchMainView('interactive')">
+        <span>▣</span> Bản Mock Bấm Được
+      </button>
+      <button class="view-switch-btn" id="btn-mode-diagram" onclick="switchMainView('diagram')">
+        <span>◫</span> Sơ Đồ Luồng (Flowchart)
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP NAVIGATION PILLS (Click to jump anywhere) -->
+  <div class="step-nav-wrapper" id="step-nav-bar">
+    <ul class="step-nav-list">
+      <li class="step-pill active" id="pill-step-1" onclick="goToStep(1)">
+        <span class="num">I</span>
+        <span>Dashboard VLearn</span>
+      </li>
+      <li class="step-pill" id="pill-step-2" onclick="goToStep(2)">
+        <span class="num">II</span>
+        <span>Làm bài thử (Trước lý thuyết)</span>
+      </li>
+      <li class="step-pill" id="pill-step-3" onclick="goToStep(3)">
+        <span class="num">III</span>
+        <span>AI Quyết định & Gợi ý</span>
+      </li>
+      <li class="step-pill" id="pill-step-4" onclick="goToStep(4)">
+        <span class="num">IV</span>
+        <span>Học viên Thử lại</span>
+      </li>
+      <li class="step-pill" id="pill-step-5" onclick="goToStep(5)">
+        <span class="num">V</span>
+        <span>Hoàn thành & Mở lý thuyết</span>
+      </li>
+    </ul>
+    <div class="step-nav-right">
+      <span>Kịch bản kiểm thử:</span>
+      <select id="scenario-selector" onchange="changeScenario(this.value)">
+        <option value="sufficient">Đủ căn cứ (Happy Path: Ngộ nhận RAG vs Fine-tuning)</option>
+        <option value="insufficient">Chưa đủ căn cứ (Edge Case: Trả lời mơ hồ, cần hỏi lại)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ================= VLEARN ACADEMY HEADER ================= -->
+  <header class="vlearn-header">
+    <div class="vlearn-left">
+      <div class="vlearn-logo" onclick="goToStep(1)">
+        <div class="vlearn-logo-icon">
+          <!-- Geometric Academic Monogram -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M4 5L12 20L20 5" stroke="#000000" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="miter"/>
+            <line x1="8" y1="5" x2="16" y2="5" stroke="#000000" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="vlearn-logo-text-wrap">
+          <span class="vlearn-logo-text">VLEARN</span>
+          <span class="vlearn-logo-sub">International Academy</span>
+        </div>
+      </div>
+      <nav>
+        <ul class="vlearn-nav">
+          <li class="vlearn-nav-item active" onclick="goToStep(1)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            Home
+          </li>
+          <li class="vlearn-nav-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            Courses
+          </li>
+          <li class="vlearn-nav-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            Practice <span class="vlearn-nav-badge badge-soon">Soon</span>
+          </li>
+          <li class="vlearn-nav-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31"></path><path d="M14 9.3V2"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+            Lab <span class="vlearn-nav-badge badge-new">New</span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="vlearn-right">
+      <div class="lang-toggle">
+        <span class="lang-opt">EN</span>
+        <span class="lang-opt active">VI</span>
+      </div>
+      <button class="icon-btn" title="Giao diện tối">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+      <button class="icon-btn" title="Thông báo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      </button>
+      <div class="user-avatar" title="Học viên: MAI (Hồ Ngọc Mai)">H</div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="container">
+
+    <!-- VIEW 1: INTERACTIVE PROTOTYPE (SCREENS 1 TO 5) -->
+    <div id="interactive-view">
+
+      <!-- ============================================== -->
+      <!-- SCREEN 1: DASHBOARD VLEARN (ENTRY POINT)       -->
+      <!-- ============================================== -->
+      <section class="screen-view active" id="screen-1">
+        <div class="hero-welcome">
+          <div class="hero-meta-strip">
+            <span class="institutional-badge filled">FACULTY OF ARTIFICIAL INTELLIGENCE</span>
+            <span class="institutional-badge">TRACK D2 · ADAPTIVE PRE-TEST</span>
+            <span class="institutional-badge">COHORT L3-L4 · BATCH 04</span>
+          </div>
+          <h1 class="hero-title">Chào buổi tối, Học viên MAI!</h1>
+          <div class="hero-sub">
+            <div class="hero-desc-text">
+              Hôm nay bạn bắt đầu nghiên cứu chuyên đề: <strong>Retrieval-Augmented Generation (RAG)</strong>.
+              Áp dụng phương pháp sư phạm hàn lâm <em>"Học từ lỗi trước: Làm bài rồi mới được giảng"</em>: Bạn hãy hoàn thành bài luyện tập chẩn đoán (không tính điểm) để bộc lộ cách hiểu trực giác trước khi tiếp cận lý thuyết chuyên sâu.
+            </div>
+            <div>
+              <button class="hero-cta-btn" onclick="goToStep(2)">
+                Bắt đầu làm bài thử thách →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- LEFT COLUMN: MY COURSES -->
+          <div class="card-box">
+            <div class="card-header-row">
+              <span class="card-title">MY COURSES · CHƯƠNG TRÌNH ĐANG HỌC</span>
+              <a class="card-link" onclick="goToStep(2)">XEM TẤT CẢ ▶</a>
+            </div>
+
+            <!-- TABS -->
+            <div class="card-tabs">
+              <button class="tab-btn active">L3-L4 - Khóa 4 Phase 1</button>
+              <button class="tab-btn">Khoá 3 Phase 1</button>
+            </div>
+
+            <!-- LESSON LIST -->
+            <div class="lesson-list">
+
+              <!-- Day 1: In Progress with Track D2 Pre-test -->
+              <div class="lesson-row highlight" onclick="goToStep(2)" title="Nhấn để bắt đầu làm bài luyện tập trước lý thuyết">
+                <div class="lesson-left">
+                  <div class="lesson-circle">▶</div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span class="lesson-name">Day 1: Day01 · Khái niệm RAG</span>
+                      <span class="lesson-badge badge-featured">LÀM BÀI TRƯỚC LÝ THUYẾT</span>
+                    </div>
+                    <div class="lesson-subtext">
+                      Track D2: Thử sức kiểm tra cách hiểu trực giác (không tính điểm) trước khi mở bài giảng lý thuyết
+                    </div>
+                  </div>
+                </div>
+                <span class="lesson-badge badge-in-progress">IN PROGRESS...</span>
+              </div>
+
+              <!-- Day 2 -->
+              <div class="lesson-row" onclick="alert('Day 02 sẽ mở khóa sau khi bạn hoàn thành các bài học trước!')">
+                <div class="lesson-left">
+                  <div class="lesson-circle">02</div>
+                  <div>
+                    <div class="lesson-name">Day 2: DAY02</div>
+                    <div class="lesson-subtext">Vector Database & Embeddings</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Day 3 -->
+              <div class="lesson-row" onclick="alert('Day 03 sẽ mở khóa sau khi bạn hoàn thành các bài học trước!')">
+                <div class="lesson-left">
+                  <div class="lesson-circle">03</div>
+                  <div>
+                    <div class="lesson-name">Day 3: DAY03</div>
+                    <div class="lesson-subtext">Prompt Engineering & Context Injection</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Day 4 -->
+              <div class="lesson-row" onclick="alert('Day 04 sẽ mở khóa sau khi bạn hoàn thành các bài học trước!')">
+                <div class="lesson-left">
+                  <div class="lesson-circle">04</div>
+                  <div>
+                    <div class="lesson-name">Day 4: DAY04</div>
+                    <div class="lesson-subtext">Fine-tuning vs RAG Pipeline</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Day 16: MINI HACKATHON -->
+              <div class="lesson-row" onclick="goToStep(2)">
+                <div class="lesson-left">
+                  <div class="lesson-circle">🏆</div>
+                  <div>
+                    <div class="lesson-name">Day 16: MINI HACKATHON</div>
+                    <div class="lesson-subtext">Batch 04 · Lớp 3B · Phòng E402 · Cụm B2 · Nhóm K4-3B-E402-AIGAN</div>
+                  </div>
+                </div>
+                <span class="lesson-badge badge-featured">TRACK D2 DEMO</span>
+              </div>
+
+              <!-- Day 5 -->
+              <div class="lesson-row">
+                <div class="lesson-left">
+                  <div class="lesson-circle">05</div>
+                  <div class="lesson-name">Day 5: Day05 · Advanced Retrieval</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- D2 TRACK INFO CARD (Canvas CP1 Alignment) -->
+            <div class="d2-callout">
+              <div class="d2-icon">D2</div>
+              <div class="d2-content" style="flex: 1;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+                  <h4>Lát cắt Track D2 — Học từ lỗi trước</h4>
+                  <span class="institutional-badge">CANVAS CP1</span>
+                </div>
+                <p>
+                  <strong>Vấn đề thực tế:</strong> Khảo sát 60 học viên cho thấy <strong>67.7%</strong> người học khi làm sai chỉ xem đáp án chung rồi đoán/thử ra kết quả mà không tự giải thích được cách làm.
+                  <br>
+                  <strong>Giải pháp VLearn D2:</strong> Học viên trả lời bài tập trước khi xem lý thuyết ➔ AI đối chiếu rubric & tài liệu để quyết định <strong>đủ hay chưa đủ căn cứ</strong> đưa 1 gợi ý tối thiểu kèm nguồn ➔ Học viên tự sửa hiểu.
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <button class="d2-btn" onclick="goToStep(2)">
+                    Làm bài thử ngay (Vào Bước 2) →
+                  </button>
+                  <button class="btn-secondary" style="padding: 9px 16px; font-size: 11px;" onclick="switchMainView('diagram')">
+                    Xem Sơ đồ luồng (Flowchart) ◫
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: SIDEBAR -->
+          <div class="sidebar-col">
+
+            <!-- STUDY STREAK -->
+            <div class="sidebar-card black-card">
+              <div class="sidebar-title">
+                <span>STUDY STREAK</span>
+                <span class="institutional-badge" style="background: transparent; color: #fff; border-color: #fff;">0 DAYS</span>
+              </div>
+              <div class="streak-body">
+                <span>Học hôm nay để kích hoạt chuỗi học tập</span>
+                <button class="streak-btn" onclick="goToStep(2)">
+                  Bắt đầu →
+                </button>
+              </div>
+            </div>
+
+            <!-- WHERE YOU'RE WEAKEST -->
+            <div class="sidebar-card">
+              <div class="sidebar-title">
+                <span>WHERE YOU'RE WEAKEST</span>
+                <span class="institutional-badge">D2 ADAPTIVE</span>
+              </div>
+              <div class="weakness-body">
+                <p style="margin-bottom: 8px; font-weight: 700; color: #000000;">Chưa có dữ liệu chẩn đoán.</p>
+                Làm bài tập chẩn đoán để VLearn đánh giá điểm nghẽn nhận thức của bạn.
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #000000; font-size: 12px;">
+                  <strong>Cơ chế D2:</strong> AI không giải bài hộ mà xác định sự phân vân giữa RAG và Fine-tuning để đưa gợi ý gợi mở.
+                </div>
+                <button class="btn-secondary" style="width: 100%; margin-top: 12px; padding: 9px; font-size: 11px;" onclick="goToStep(2)">
+                  Làm bài chẩn đoán tư duy →
+                </button>
+              </div>
+            </div>
+
+            <!-- STUDY ACTIVITY -->
+            <div class="sidebar-card">
+              <div class="card-header-row" style="margin-bottom: 12px; border-bottom: 1px solid #000;">
+                <span class="card-title">STUDY ACTIVITY</span>
+                <a class="card-link" onclick="alert('Chưa có lịch sử học tập. Hãy bắt đầu bài tập Day 01!')">XEM TẤT CẢ ▶</a>
+              </div>
+              <div style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 22px 10px; background: var(--bg-subtle); border: 1px solid var(--black); font-family: 'Cinzel', serif; letter-spacing: 0.08em;">
+                CHƯA CÓ HOẠT ĐỘNG NÀO ĐƯỢC GHI NHẬN
+              </div>
+            </div>
+
+            <!-- TEAM INFO -->
+            <div class="sidebar-card" style="font-size: 12px; color: var(--charcoal);">
+              <div class="academic-title" style="font-size: 11px; margin-bottom: 6px; font-weight: 800;">NHÓM K4-3B-E402-AIGAN</div>
+              <div>PO / Luồng: <strong>Mai Văn Trường</strong></div>
+              <div>Evidence: <strong>Nguyễn Việt Đức</strong></div>
+              <div>UX / Prompt: <strong>Hồ Ngọc Mai</strong></div>
+              <div>Tech / Demo: <strong>Dương Văn Thành</strong></div>
+              <div style="margin-top: 8px; font-weight: 700; border-top: 1px solid #000; padding-top: 6px;">
+                Willing Users: Huy, Cường, Linh
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 2: PRE-THEORY QUIZ (LÀM BÀI TRƯỚC LÝ THUYẾT) -->
+      <!-- ============================================== -->
+      <section class="screen-view" id="screen-2">
+        <div class="flow-page-header">
+          <div class="flow-breadcrumb">
+            <a onclick="goToStep(1)">Dashboard</a> <span>/</span>
+            <span>Day 1: Day01</span> <span>/</span>
+            <span id="quiz-breadcrumb-tag">Khái niệm RAG</span>
+          </div>
+          <span class="step-tag" id="quiz-step-tag">BƯỚC II / V · CÂU HỎI 1 / 2</span>
+        </div>
+
+        <div class="flow-layout">
+          <div class="main-panel">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <h2 class="flow-title" id="quiz-main-title" style="margin-bottom: 0;">Kiểm tra cách hiểu của bạn trước khi xem lý thuyết</h2>
+              <span class="institutional-badge filled" id="quiz-progress-badge">
+                Tiến độ: Câu 1 / 2
+              </span>
+            </div>
+            <p class="flow-desc">Bài luyện tập này <strong>không tính điểm số</strong>. Mục tiêu là giúp bạn bộc lộ cách hiểu trực giác về khái niệm AI mới, từ đó AI có thể hỗ trợ bạn nhận diện điểm nghẽn và tự sửa cách hiểu.</p>
+
+            <div class="question-box">
+              <div class="question-meta">
+                <span class="meta-tag" id="question-concept-tag">Khái niệm: Retrieval-Augmented Generation (RAG)</span>
+                <span class="no-score-badge">Không tính điểm</span>
+              </div>
+              <div class="question-text" id="question-text-el">
+                Một công ty vừa ban hành quy chế nội bộ mới vào sáng nay. Tại sao mô hình LLM mặc định không thể trả lời đúng quy chế này, và cơ chế RAG can thiệp như thế nào?
+              </div>
+            </div>
+
+            <!-- Choices Group -->
+            <label class="explain-label">Chọn phương án bạn cho là đúng nhất:</label>
+            <div class="choice-group" id="choice-container">
+              <div class="choice-item selected" id="choice-A" onclick="selectChoice('A')">
+                <div class="choice-letter">A</div>
+                <div class="choice-content" id="choice-text-A">
+                  <strong>RAG huấn luyện lại (fine-tune) mô hình</strong> với văn bản quy chế mới để cập nhật trọng số tri thức vĩnh viễn vào bộ não của LLM.
+                </div>
+              </div>
+
+              <div class="choice-item" id="choice-B" onclick="selectChoice('B')">
+                <div class="choice-letter">B</div>
+                <div class="choice-content" id="choice-text-B">
+                  <strong>RAG tìm kiếm văn bản liên quan</strong> tại thời điểm người dùng hỏi rồi nhúng vào context window (ngữ cảnh câu hỏi) để LLM đọc và trả lời bám sát nguồn.
+                </div>
+              </div>
+
+              <div class="choice-item" id="choice-C" onclick="selectChoice('C')">
+                <div class="choice-letter">C</div>
+                <div class="choice-content" id="choice-text-C">
+                  <strong>RAG thay thế hoàn toàn mô hình ngôn ngữ</strong> bằng một công cụ tìm kiếm SQL cơ sở dữ liệu truyền thống.
+                </div>
+              </div>
+            </div>
+
+            <!-- Written explanation -->
+            <div class="explain-section">
+              <label class="explain-label" for="user-explanation">
+                Giải thích ngắn bằng lời của bạn (1-2 câu):
+              </label>
+              <div class="explain-sub">
+                Phần giải thích giúp AI hiểu rõ bạn đang suy luận thế nào (thay vì đoán mò đáp án).
+              </div>
+              <textarea class="explain-textarea" id="user-explanation" placeholder="Ví dụ: Em nghĩ khi có tài liệu mới thì phải nạp vào để mô hình học lại các tham số..."></textarea>
+
+              <div class="preset-bar">
+                <span class="preset-label">Nạp nhanh câu trả lời mẫu:</span>
+                <button class="preset-btn" type="button" onclick="fillPreset('misconception')">
+                  Mẫu 1: Trả lời sai (Ngộ nhận phổ biến - Đủ căn cứ)
+                </button>
+                <button class="preset-btn" type="button" onclick="fillPreset('correct')">
+                  Mẫu 2: Trả lời đúng ngay
+                </button>
+                <button class="preset-btn" type="button" onclick="fillPreset('vague')">
+                  Mẫu 3: Trả lời mơ hồ (Chưa đủ căn cứ)
+                </button>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn-primary" type="button" onclick="submitStep2()">
+                Gửi câu trả lời để kiểm tra Đúng / Sai →
+              </button>
+              <button class="btn-secondary" type="button" onclick="goToStep(1)">
+                Quay lại Dashboard
+              </button>
+            </div>
+          </div>
+
+          <!-- ASIDE CONTEXT -->
+          <div class="flow-aside">
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>⚖️</span> Cơ chế kiểm tra Đúng / Sai D2
+              </div>
+              <div class="spec-card-body">
+                Hệ thống kiểm tra ngay bạn <strong>Đúng</strong> hay <strong>Chưa đúng</strong>:
+                <br><br>
+                • <strong>Nếu Đúng:</strong> AI xác nhận và cho phép bấm <strong>"Qua câu tiếp theo →"</strong> ngay.
+                <br>• <strong>Nếu Chưa đúng:</strong> Hệ thống <strong>không cho sẵn đáp án</strong> mà đưa gợi ý tối thiểu để bạn tự sửa lại.
+              </div>
+            </div>
+
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>📋</span> Quyết định AI có điều kiện
+              </div>
+              <div class="spec-card-body">
+                AI đối chiếu câu trả lời với rubric và bài giảng:
+                <br><br>
+                • <strong>Đủ căn cứ:</strong> Đưa 1 gợi ý tối thiểu + nguồn kiểm chứng.
+                <br>• <strong>Chưa đủ căn cứ:</strong> Nêu rõ chưa đủ căn cứ và hỏi lại làm rõ, không phán xét võ đoán.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 3: AI FEEDBACK (BIẾT ĐÚNG / SAI & GỢI Ý) -->
+      <!-- ============================================== -->
+      <section class="screen-view" id="screen-3">
+        <div class="flow-page-header">
+          <div class="flow-breadcrumb">
+            <a onclick="goToStep(1)">Dashboard</a> <span>/</span>
+            <a onclick="goToStep(2)">Làm bài trước lý thuyết</a> <span>/</span>
+            <span>Kết quả & Phản hồi</span>
+          </div>
+          <span class="step-tag">BƯỚC III / V · KẾT QUẢ & PHẢN HỒI AI</span>
+        </div>
+
+        <div class="flow-layout">
+          <div class="main-panel">
+
+            <!-- ======================================= -->
+            <!-- SUB-CASE 1: TRẢ LỜI ĐÚNG NGAY (CORRECT) -->
+            <!-- ======================================= -->
+            <div id="ai-result-correct" style="display: none;">
+              <!-- Banner Đúng -->
+              <div class="result-status-banner status-correct">
+                <div class="result-icon">✓</div>
+                <div>
+                  <div class="result-badge">KẾT QUẢ: CHÍNH XÁC</div>
+                  <div class="result-title">Xuất sắc! Bạn đã hiểu đúng bản chất của khái niệm này.</div>
+                  <div class="result-desc" id="correct-feedback-desc">
+                    RAG không huấn luyện lại mô hình mà truy xuất tài liệu liên quan tại thời điểm hỏi rồi đưa vào context window để LLM đọc và trả lời bám sát nguồn.
+                  </div>
+                </div>
+              </div>
+
+              <div class="source-box">
+                <div>
+                  <strong>Căn cứ tham khảo:</strong> <span id="correct-source-tag">Tài liệu VLearn AI Base · Khái niệm Context Injection</span>
+                </div>
+                <a class="source-link" href="#source" onclick="alert('Mở tài liệu: VLearn AI Knowledge Base')">
+                  Xem bài giảng ↗
+                </a>
+              </div>
+
+              <div class="btn-row">
+                <button class="btn-primary" type="button" id="btn-next-q-from-correct" onclick="goToNextQuestion()">
+                  Qua câu tiếp theo → (Câu 2 / 2)
+                </button>
+                <button class="btn-secondary" type="button" onclick="goToStep(2)">
+                  Xem lại câu trả lời vừa gửi
+                </button>
+              </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!-- SUB-CASE 2: TRẢ LỜI SAI - ĐỦ CĂN CỨ     -->
+            <!-- ======================================= -->
+            <div id="ai-result-sufficient" style="display: block;">
+              <!-- Banner Sai -->
+              <div class="result-status-banner status-wrong">
+                <div class="result-icon">✗</div>
+                <div>
+                  <div class="result-badge">KẾT QUẢ: BẠN TRẢ LỜI CHƯA ĐÚNG</div>
+                  <div class="result-title" id="wrong-detected-title">Phát hiện điểm nghẽn: Bạn đang phân vân giữa RAG và Fine-tuning</div>
+                  <div class="result-desc" id="wrong-user-summary">
+                    Câu trả lời của bạn chọn phương án nhầm lẫn giữa cơ chế truy xuất ngữ cảnh và cơ chế huấn luyện lại trọng số mô hình.
+                  </div>
+                </div>
+              </div>
+
+              <div class="ai-decision-card">
+                <div class="decision-header">
+                  <div class="decision-icon">D2</div>
+                  <div>
+                    <span class="decision-badge">TRỢ LÝ SƯ PHẠM VLEARN · GỢI Ý TỐI THIỂU</span>
+                    <div class="decision-title">Hệ thống không cho sẵn đáp án để bạn có cơ hội tự tư duy lại:</div>
+                  </div>
+                </div>
+
+                <!-- MINIMAL HINT -->
+                <div class="hint-highlight-box">
+                  <div class="hint-highlight-label">
+                    <span>🔍</span> GỢI Ý TỐI THIỂU (MINIMAL HINT)
+                  </div>
+                  <div class="hint-highlight-text" id="minimal-hint-text">
+                    Hãy thử suy nghĩ: Mô hình ngôn ngữ có nhất thiết phải thay đổi trọng số (weights) bên trong thì mới trả lời được không? Nếu bạn cung cấp tài liệu ngay trong câu hỏi (cửa sổ ngữ cảnh - context window) giống như cho học sinh mở sách khi làm bài, thì đó là cơ chế gì?
+                  </div>
+                </div>
+
+                <!-- SOURCE -->
+                <div class="source-box" style="margin-bottom: 0;">
+                  <div>
+                    <strong>Căn cứ tham khảo:</strong> <span id="hint-source-text">Tài liệu VLearn AI Base · Khái niệm Context Injection & Retrieval</span>
+                  </div>
+                  <a class="source-link" href="#source" onclick="alert('Mở tài liệu: Section 3.1 - RAG vs Fine-tuning Pipeline')">
+                    Xem trích dẫn ↗
+                  </a>
+                </div>
+              </div>
+
+              <div class="btn-row">
+                <button class="btn-primary" type="button" onclick="goToStep(4)">
+                  Tôi đã nhận ra! Thử sửa lại ngay →
+                </button>
+                <button class="btn-secondary" type="button" onclick="goToStep(2)">
+                  Xem lại câu hỏi ban đầu
+                </button>
+              </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!-- SUB-CASE 3: TRẢ LỜI MƠ HỒ - CHƯA ĐỦ CĂN CỨ -->
+            <!-- ======================================= -->
+            <div id="ai-result-insufficient" style="display: none;">
+              <div class="result-status-banner status-wrong">
+                <div class="result-icon">?</div>
+                <div>
+                  <div class="result-badge">KẾT QUẢ: CHƯA ĐỦ CĂN CỨ KẾT LUẬN</div>
+                  <div class="result-title">Chưa đủ dữ kiện để xác định nguyên nhân bạn hiểu sai</div>
+                  <div class="result-desc">
+                    Câu giải thích của bạn quá ngắn hoặc chưa thể hiện chuỗi suy luận logic, nên AI <strong>không thể vội vàng phán xét bạn hiểu sai ở khái niệm nào</strong> (tránh củng cố thông tin sai lệch).
+                  </div>
+                </div>
+              </div>
+
+              <div class="hint-highlight-box">
+                <div class="hint-highlight-label">
+                  <span>💬</span> CÂU HỎI LÀM RÕ (CLARIFICATION PROMPT)
+                </div>
+                <div class="hint-highlight-text" id="clarify-text">
+                  Khi bạn nghe cụm từ "Retrieval" (Truy xuất) và "Generation" (Tạo sinh), bạn liên tưởng đến hành động tìm kiếm thông tin trước hay hành động dạy học cho mô hình trước? Hãy chia sẻ 1 câu suy nghĩ tự nhiên nhất của bạn nhé!
+                </div>
+              </div>
+
+              <div class="btn-row">
+                <button class="btn-primary" type="button" onclick="goToStep(2)">
+                  Quay lại bổ sung thêm giải thích ↩
+                </button>
+                <button class="btn-secondary" type="button" onclick="setScenario('sufficient')">
+                  Chuyển sang kịch bản Đủ căn cứ
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ASIDE CONTEXT -->
+          <div class="flow-aside">
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>🛡️</span> Vì sao không cho luôn đáp án?
+              </div>
+              <div class="spec-card-body">
+                Khảo sát chỉ ra <strong>67.7%</strong> người học khi thấy lời giải sẽ bấm theo ngay mà không tự hiểu bản chất.
+                <br><br>
+                Cơ chế D2 giữ lại đáp án, đưa gợi ý tối thiểu để người học <strong>tự sửa lại đúng</strong> rồi mới chuyển sang câu tiếp theo.
+              </div>
+            </div>
+
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>🧪</span> Thử nghiệm các nhánh phản hồi
+              </div>
+              <div class="spec-card-body">
+                <button class="preset-btn" style="width: 100%; margin-bottom: 8px;" onclick="simulateFeedback('wrong')">
+                  Nhánh 1: Trả lời Sai (Nhận gợi ý D2)
+                </button>
+                <button class="preset-btn" style="width: 100%; margin-bottom: 8px;" onclick="simulateFeedback('correct')">
+                  Nhánh 2: Trả lời Đúng ngay
+                </button>
+                <button class="preset-btn" style="width: 100%;" onclick="simulateFeedback('vague')">
+                  Nhánh 3: Trả lời Mơ hồ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 4: RETRY (HỌC VIÊN TỰ SỬA HIỂU)         -->
+      <!-- ============================================== -->
+      <section class="screen-view" id="screen-4">
+        <div class="flow-page-header">
+          <div class="flow-breadcrumb">
+            <a onclick="goToStep(1)">Dashboard</a> <span>/</span>
+            <a onclick="goToStep(2)">Làm bài</a> <span>/</span>
+            <a onclick="goToStep(3)">Gợi ý</a> <span>/</span>
+            <span>Thử lại</span>
+          </div>
+          <span class="step-tag">BƯỚC IV / V · TỰ SỬA HIỂU</span>
+        </div>
+
+        <div class="flow-layout">
+          <div class="main-panel">
+            <h2 class="flow-title">Bây giờ, hãy thử diễn đạt lại bằng lời của bạn</h2>
+            <p class="flow-desc">Bạn không cần chép lại nguyên văn gợi ý của AI. Hãy viết lại theo cách mà bạn vừa tự nhận ra trong đầu.</p>
+
+            <div class="question-box">
+              <span class="meta-tag">GỢI Ý BẠN VỪA NHẬN ĐƯỢC:</span>
+              <p style="font-size: 13px; color: var(--charcoal); margin-top: 6px;" id="retry-hint-display">
+                <em>"Mô hình không cần thay đổi trọng số mà chỉ cần mở tài liệu liên quan trong context window lúc hỏi..."</em>
+              </p>
+            </div>
+
+            <div class="explain-section">
+              <label class="explain-label" for="retry-explanation">
+                Cách bạn hiểu lại sau gợi ý:
+              </label>
+              <textarea class="explain-textarea" id="retry-explanation" placeholder="Nhập câu trả lời đã được bạn tự sửa..."></textarea>
+            </div>
+
+            <!-- SUCCESS CONFIRMATION BOX (AFTER USER RETRIES) -->
+            <div id="retry-success-box" style="display: none; margin-bottom: 20px;">
+              <div class="result-status-banner status-correct">
+                <div class="result-icon">✓</div>
+                <div>
+                  <div class="result-badge">XÁC NHẬN: BẠN ĐÃ TỰ SỬA ĐÚNG!</div>
+                  <div class="result-title">Rất tốt! Khái niệm đã được bạn làm sáng tỏ bằng chính lời của mình.</div>
+                  <div class="result-desc">Điểm nghẽn nhận thức đã được tháo gỡ hoàn toàn. Bây giờ bạn có thể chuyển sang câu hỏi tiếp theo!</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-row" id="retry-action-row">
+              <button class="btn-primary" type="button" id="btn-verify-retry" onclick="submitRetry()">
+                Xác nhận & Kiểm tra lần sửa này →
+              </button>
+              <button class="btn-secondary" type="button" onclick="goToStep(3)">
+                Đọc lại gợi ý của AI
+              </button>
+            </div>
+
+            <!-- NEXT QUESTION BUTTON (APPEARS AFTER SUCCESS) -->
+            <div id="retry-next-container" style="display: none; margin-top: 14px;">
+              <button class="btn-primary" type="button" id="btn-next-q-from-retry" onclick="goToNextQuestion()">
+                Qua câu tiếp theo → (Câu 2 / 2)
+              </button>
+            </div>
+
+          </div>
+
+          <!-- ASIDE CONTEXT -->
+          <div class="flow-aside">
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>🔄</span> Khoảnh khắc "Aha!"
+              </div>
+              <div class="spec-card-body">
+                Học viên tự sửa hiểu xong, hệ thống xác nhận <strong>ĐÃ ĐÚNG</strong> và lập tức mở nút <strong>"Qua câu tiếp theo →"</strong>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 5: SUCCESS & UNLOCK THEORY (KẾT THÚC)   -->
+      <!-- ============================================== -->
+      <section class="screen-view" id="screen-5">
+        <div class="flow-page-header">
+          <div class="flow-breadcrumb">
+            <a onclick="goToStep(1)">Dashboard</a> <span>/</span>
+            <span>Kết quả học tập</span>
+          </div>
+          <span class="step-tag">
+            HOÀN TẤT BÀI KIỂM TRA · TỰ SỬA HIỂU 2/2 CÂU HỎI
+          </span>
+        </div>
+
+        <div class="flow-layout">
+          <div class="main-panel">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; border-bottom: 2px solid var(--black); padding-bottom: 16px;">
+              <div style="width: 48px; height: 48px; border: 2px solid #000; background: #000; color: #fff; display: grid; place-items: center; font-size: 20px; font-family: 'Cinzel', serif; font-weight: 800;">
+                ✓
+              </div>
+              <div>
+                <h2 class="flow-title" style="margin-bottom: 2px;">Hoàn thành xuất sắc bài thử thách trước lý thuyết!</h2>
+                <p style="font-size: 13px; color: var(--text-muted);">Tất cả các câu hỏi đều đã được bạn tự nhận ra và sửa hiểu đúng bản chất.</p>
+              </div>
+            </div>
+
+            <!-- COMPARISON BEFORE & AFTER -->
+            <div class="comparison-grid">
+              <div class="compare-col compare-before">
+                <div class="compare-tag">Câu 1: Cách hiểu ban đầu</div>
+                <div class="compare-text">
+                  Nghĩ rằng RAG là <em>"huấn luyện lại (fine-tune) mô hình với dữ liệu mới để cập nhật tham số"</em>.
+                </div>
+                <div class="compare-tag" style="margin-top: 14px; border-top: 1px solid #000; padding-top: 8px;">Sau gợi ý tối thiểu:</div>
+                <div class="compare-text" id="final-after-text-1">
+                  <em>"RAG không phải train lại mà tra cứu tài liệu mới rồi đính kèm vào context window để LLM đọc và trả lời."</em>
+                </div>
+              </div>
+              <div class="compare-col compare-after">
+                <div class="compare-tag">Câu 2: Kỹ thuật Chunking</div>
+                <div class="compare-text" id="final-after-text-2">
+                  Đã hiểu đúng: <em>"Không nhét cả 100 trang vào prompt mà chia nhỏ (chunking) và dùng vector search chỉ lấy đoạn liên quan nhất."</em>
+                </div>
+                <div style="margin-top: 14px; border-top: 1px solid #000; padding-top: 8px;" class="compare-tag">
+                  KẾT QUẢ ĐẠT CHUẨN TRACK D2
+                </div>
+              </div>
+            </div>
+
+            <!-- UNLOCK THEORY BANNER -->
+            <div class="unlock-banner">
+              <div class="unlock-text">
+                <h3>Đã mở khóa bài học lý thuyết chuyên sâu!</h3>
+                <p>Giờ đây khi bạn đã có sự tò mò và hiểu đúng bản chất qua bài tập, lý thuyết kiến trúc chi tiết sẽ trở nên cực kỳ dễ hiểu.</p>
+              </div>
+              <button class="hero-cta-btn" style="background: #ffffff; color: #000000; border-color: #ffffff;" onclick="alert('Chuyển hướng vào bài giảng lý thuyết chuyên sâu: Kiến trúc chi tiết RAG Pipeline')">
+                Xem bài giảng chuyên sâu →
+              </button>
+            </div>
+
+            <!-- STATS STRIP -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px;">
+              <div style="background: #ffffff; border: 1px solid #000; padding: 14px; box-shadow: var(--shadow-crisp-sm);">
+                <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; font-family: 'Cinzel', serif;">Tiến độ bài tập</div>
+                <div style="font-size: 16px; font-weight: 800; color: #000; margin-top: 2px;">2 / 2 Câu hỏi</div>
+              </div>
+              <div style="background: #ffffff; border: 1px solid #000; padding: 14px; box-shadow: var(--shadow-crisp-sm);">
+                <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; font-family: 'Cinzel', serif;">Phương pháp</div>
+                <div style="font-size: 16px; font-weight: 800; color: #000; margin-top: 2px;">Track D2 (Tự sửa hiểu)</div>
+              </div>
+              <div style="background: #ffffff; border: 1px solid #000; padding: 14px; box-shadow: var(--shadow-crisp-sm);">
+                <div style="font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; font-family: 'Cinzel', serif;">Study Streak</div>
+                <div style="font-size: 16px; font-weight: 800; color: #000; margin-top: 2px;">+1 Ngày tích lũy</div>
+              </div>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn-primary" type="button" onclick="restartQuiz()">
+                Quay về Dashboard VLearn 🏠
+              </button>
+              <button class="btn-secondary" type="button" onclick="restartQuizToQ1()">
+                Làm lại từ Câu 1
+              </button>
+              <button class="btn-secondary" type="button" onclick="switchMainView('diagram')">
+                Xem toàn bộ Sơ đồ Luồng (Flowchart) ◫
+              </button>
+            </div>
+          </div>
+
+          <!-- ASIDE CONTEXT -->
+          <div class="flow-aside">
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>📋</span> Tiêu chí nghiệm thu CP2
+              </div>
+              <div class="spec-card-body">
+                Đã thể hiện trọn vẹn:
+                <br>• Trả lời biết rõ Đúng hay Chưa đúng
+                <br>• Gợi ý tối thiểu khi sai
+                <br>• Nút chuyển câu tiếp theo mượt mà
+                <br>• Điểm kết thúc mở khóa bài giảng.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- ============================================================== -->
+    <!-- VIEW 2: FULL FLOWCHART DIAGRAM (SƠ ĐỒ LUỒNG HOẠT ĐỘNG CP2)      -->
+    <!-- ============================================================== -->
+    <div id="diagram-view" style="display: none;">
+      <div class="flowchart-container">
+        <div class="flowchart-header">
+          <span class="institutional-badge filled" style="display: inline-block; margin-bottom: 10px;">KIẾN TRÚC HỆ THỐNG · SƠ ĐỒ LUỒNG CP2</span>
+          <h2>Luồng Hoạt Động Tổng Thể (End-to-End User Flow)</h2>
+          <p>Thể hiện chi tiết: Người dùng bấm gì trước, biết Đúng/Sai ở đâu, AI đưa gợi ý tối thiểu ra sao, và chuyển qua câu tiếp theo như thế nào.</p>
+        </div>
+
+        <div class="flow-steps-diagram">
+
+          <!-- STEP 1 -->
+          <div class="f-node">
+            <div class="f-node-top">
+              <span class="f-role">I. NGƯỜI DÙNG</span>
+              <span class="institutional-badge">Dashboard VLearn</span>
+            </div>
+            <div class="f-action-title">Học viên bấm vào bài học khái niệm mới (Day 1: Khái niệm RAG)</div>
+            <div class="f-action-desc">
+              <strong>Hành động:</strong> Học viên nhìn thấy thẻ bài học và thông báo "Làm bài trước lý thuyết - Không tính điểm số". Học viên click nút <em>"Open the course (Làm bài trước lý thuyết)"</em>.
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>chuyển sang màn hình làm bài</span>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="f-node">
+            <div class="f-node-top">
+              <span class="f-role">II. NGƯỜI DÙNG</span>
+              <span class="institutional-badge">Màn hình Bài tập Thử thách</span>
+            </div>
+            <div class="f-action-title">Chọn đáp án trắc nghiệm + Gõ giải thích ngắn suy nghĩ cá nhân</div>
+            <div class="f-action-desc">
+              <strong>Hành động:</strong> Học viên chọn phương án mình tin là đúng và nhập 1-2 câu giải thích vì sao mình nghĩ như vậy. Sau đó bấm <em>"Gửi câu trả lời để kiểm tra Đúng / Sai"</em>.
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>hệ thống đối chiếu và xác định kết quả</span>
+          </div>
+
+          <!-- STEP 3: DECISION NODE (ĐÚNG HAY SAI) -->
+          <div class="f-node" style="background: var(--bg-subtle);">
+            <div class="f-node-top">
+              <span class="f-role">III. HỆ THỐNG KIỂM TRA ĐÚNG / SAI & AI PHẢN HỒI</span>
+              <span class="institutional-badge filled">Thông báo kết quả tức thì</span>
+            </div>
+            <div class="f-action-title">Biết được Đúng hay Chưa đúng ngay sau khi trả lời</div>
+            <div class="f-action-desc">
+              • <strong>Nếu ĐÚNG:</strong> Hiện banner xác nhận CHÍNH XÁC, AI củng cố kiến thức và xuất hiện nút <strong>"Qua câu tiếp theo →"</strong>.
+              <br>• <strong>Nếu SAI (Track D2):</strong> Hiện banner CHƯA ĐÚNG. Hệ thống không cho đáp án mà đưa <strong>Gợi ý tối thiểu (Minimal Hint) + Nguồn</strong> để học viên tự sửa.
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>phân nhánh theo kết quả</span>
+          </div>
+
+          <!-- STEP 4: BRANCHING -->
+          <div class="f-branch-wrap">
+            <!-- BRANCH A: CORRECT DIRECT -->
+            <div class="f-branch-card">
+              <div class="f-branch-tag">NHÁNH 1: TRẢ LỜI ĐÚNG NGAY</div>
+              <div style="font-weight: 700; color: #000; margin-bottom: 6px; font-size: 15px;">Xác nhận chính xác & Chuyển tiếp</div>
+              <div style="font-size: 13px; color: var(--charcoal); line-height: 1.55;">
+                • <strong>Thấy gì:</strong> Banner báo đúng + lời giải thích củng cố.
+                <br>• <strong>Nút bấm:</strong> Học viên bấm <em>"Qua câu tiếp theo →"</em> để sang câu kế tiếp ngay lập tức.
+              </div>
+            </div>
+
+            <!-- BRANCH B: WRONG & D2 SELF-CORRECTION -->
+            <div class="f-branch-card">
+              <div class="f-branch-tag">NHÁNH 2: TRẢ LỜI SAI (CƠ CHẾ D2)</div>
+              <div style="font-weight: 700; color: #000; margin-bottom: 6px; font-size: 15px;">Gợi ý tối thiểu ➔ Học viên Tự sửa hiểu</div>
+              <div style="font-size: 13px; color: var(--charcoal); line-height: 1.55;">
+                • <strong>Thấy gì:</strong> Báo sai + Nhận diện ngộ nhận + Gợi ý tối thiểu.
+                <br>• <strong>Hành động:</strong> Học viên tự sửa lại cách hiểu đúng.
+                <br>• <strong>Kết quả:</strong> Khi sửa đúng ➔ Hiện nút <em>"Qua câu tiếp theo →"</em>.
+              </div>
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>sau khi hoàn thành hoặc sửa đúng câu hỏi</span>
+          </div>
+
+          <!-- STEP 5: NEXT QUESTION / PROGRESSION -->
+          <div class="f-node">
+            <div class="f-node-top">
+              <span class="f-role">IV. QUA CÂU TIẾP THEO</span>
+              <span class="institutional-badge">Tiến độ bài luyện tập</span>
+            </div>
+            <div class="f-action-title">Chuyển sang câu hỏi kế tiếp (Câu 2/2: Chunking & Context Window)</div>
+            <div class="f-action-desc">
+              <strong>Hành động:</strong> Học viên bấm nút <em>"Qua câu tiếp theo →"</em>, màn hình nạp câu hỏi mới. Học viên tiếp tục thử sức và nhận phản hồi tương tự cho đến khi hoàn thành toàn bộ bài tập.
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>hoàn tất toàn bộ chuỗi câu hỏi</span>
+          </div>
+
+          <!-- STEP 6: DONE -->
+          <div class="f-node" style="background: var(--bg-subtle);">
+            <div class="f-node-top">
+              <span class="f-role">V. HOÀN THÀNH TOÀN BỘ</span>
+              <span class="institutional-badge filled">Màn hình Đích & Mở khóa</span>
+            </div>
+            <div class="f-action-title">Hiển thị So sánh Trước - Sau & Mở khóa Bài giảng Lý thuyết Chi tiết</div>
+            <div class="f-action-desc">
+              <strong>Kết thúc ở đâu:</strong>
+              <br>• Học viên thấy bảng so sánh tư duy (Trước khi gợi ý vs Sau khi tự sửa cho cả 2 câu hỏi).
+              <br>• Hệ thống cập nhật Study Streak (+1 ngày).
+              <br>• Mở khóa bài học lý thuyết sâu: <em>"Kiến trúc RAG Pipeline thực tế"</em>.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SUMMARY TABLE -->
+        <table class="flow-summary-table">
+          <thead>
+            <tr>
+              <th>Bước</th>
+              <th>Người dùng bấm gì?</th>
+              <th>Người dùng thấy gì?</th>
+              <th>Hệ thống / AI làm gì?</th>
+              <th>Đầu ra kết quả</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>I. Entry Point</strong></td>
+              <td>Bấm nút <em>"Open the course (Làm bài trước lý thuyết)"</em></td>
+              <td>Thẻ bài tập Day 01 kèm tag "Làm bài trước lý thuyết"</td>
+              <td>Tải câu hỏi kiểm tra khái niệm RAG</td>
+              <td>Vào giao diện làm bài</td>
+            </tr>
+            <tr>
+              <td><strong>II. Làm bài & Biết Đúng/Sai</strong></td>
+              <td>Chọn đáp án A/B/C, gõ giải thích và bấm <em>"Gửi câu trả lời"</em></td>
+              <td>Form làm bài câu hỏi 1/2 với các nút nạp nhanh mẫu</td>
+              <td>Chấm kết quả ngay lập tức: <strong>ĐÚNG hay SAI</strong></td>
+              <td>Hiển thị banner kết quả rõ ràng</td>
+            </tr>
+            <tr>
+              <td><strong>III. AI Gợi ý & Xử lý</strong></td>
+              <td>Đọc kết quả và phản hồi từ trợ lý VLearn</td>
+              <td>Nếu đúng: banner xác nhận. Nếu sai: banner chỉ ra ngộ nhận và gợi ý tối thiểu</td>
+              <td>Chỉ đưa gợi ý nhỏ kèm nguồn, không cho xem đáp án sẵn</td>
+              <td>Giữ an toàn kiến thức (HAX)</td>
+            </tr>
+            <tr>
+              <td><strong>IV. Tự sửa & Qua câu tiếp</strong></td>
+              <td>Gõ câu sửa hiểu, bấm <em>"Xác nhận"</em>, rồi bấm <em>"Qua câu tiếp theo →"</em></td>
+              <td>Thông báo sửa đúng xuất hiện, kèm nút bấm qua câu tiếp theo</td>
+              <td>Xác nhận học viên đã hiểu đúng và nạp câu hỏi 2/2</td>
+              <td>Chuyển sang câu hỏi kế tiếp</td>
+            </tr>
+            <tr>
+              <td><strong>V. Kết thúc bộ bài</strong></td>
+              <td>Bấm <em>"Hoàn thành & Xem tổng kết"</em></td>
+              <td>Bảng so sánh Trước-Sau, Mở khóa bài lý thuyết, Cập nhật Streak</td>
+              <td>Ghi nhận hoàn thành bộ câu hỏi vào hồ sơ VLearn</td>
+              <td>Hoàn tất trọn vẹn chu trình D2</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="text-align: center; margin-top: 36px;">
+          <button class="btn-primary" onclick="switchMainView('interactive')">
+            ← Quay lại Chế độ Trải nghiệm Mockup bấm được
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="vlearn-footer">
+    <div>VLearn International Academy · Hackathon AI Batch 04 · Lớp 3B · Phòng E402 · Cụm B2 · Track D2</div>
+    <div style="margin-top: 4px;">Thành viên nhóm: Mai Văn Trường (PO/Luồng) · Nguyễn Việt Đức (Evidence) · Hồ Ngọc Mai (UX/Prompt) · Dương Văn Thành (Tech/Demo)</div>
+  </footer>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    // QUESTIONS DATABASE FOR TRACK D2 PRE-THEORY QUIZ
+    const questionsData = [
+      {
+        id: 1,
+        indexLabel: "CÂU HỎI 1 / 2",
+        stepTag: "BƯỚC II / V · CÂU HỎI 1 / 2",
+        progressBadge: "Tiến độ: Câu 1 / 2",
+        concept: "Khái niệm: Retrieval-Augmented Generation (RAG)",
+        question: "Một công ty vừa ban hành quy chế nội bộ mới vào sáng nay. Tại sao mô hình LLM mặc định không thể trả lời đúng quy chế này, và cơ chế RAG can thiệp như thế nào?",
+        choices: [
+          {
+            id: "A",
+            text: "<strong>RAG huấn luyện lại (fine-tune) mô hình</strong> với văn bản quy chế mới để cập nhật trọng số tri thức vĩnh viễn vào bộ não của LLM.",
+            isCorrect: false,
+            misconceptionTitle: "Phát hiện điểm nghẽn: Bạn đang phân vân giữa RAG và Fine-tuning (cập nhật weights)",
+            userSummary: "Bạn nghĩ rằng khi có tài liệu mới thì phải huấn luyện lại để cập nhật trọng số vào bộ não mô hình. Đây là cơ chế của Fine-tuning, không phải RAG!"
+          },
+          {
+            id: "B",
+            text: "<strong>RAG tìm kiếm văn bản liên quan</strong> tại thời điểm người dùng hỏi rồi nhúng vào context window (ngữ cảnh câu hỏi) để LLM đọc và trả lời bám sát nguồn.",
+            isCorrect: true
+          },
+          {
+            id: "C",
+            text: "<strong>RAG thay thế hoàn toàn mô hình ngôn ngữ</strong> bằng một công cụ tìm kiếm SQL cơ sở dữ liệu truyền thống.",
+            isCorrect: false,
+            misconceptionTitle: "Phát hiện ngộ nhận: RAG không thay thế mô hình ngôn ngữ",
+            userSummary: "RAG vẫn dùng LLM để đọc hiểu và tổng hợp văn phong, chỉ bổ sung thêm công đoạn tìm kiếm tài liệu đưa vào prompt."
+          }
+        ],
+        hint: "Hãy thử suy nghĩ: Mô hình ngôn ngữ có nhất thiết phải thay đổi trọng số (weights) bên trong thì mới trả lời được không? Nếu bạn cung cấp tài liệu ngay trong câu hỏi (cửa sổ ngữ cảnh - context window) giống như cho học sinh mở sách khi làm bài, thì đó là cơ chế gì?",
+        source: "Tài liệu VLearn AI Base · Khái niệm Context Injection & Retrieval",
+        correctFeedback: "Chính xác! RAG không huấn luyện lại mô hình (không tốn chi phí và thời gian fine-tune). Thay vào đó, nó tìm kiếm tài liệu mới tại thời điểm truy vấn rồi đưa thẳng vào Prompt (Context Window) để LLM đọc và trả lời bám sát nguồn.",
+        defaultMisconceptionText: "Em nghĩ khi công ty có văn bản mới thì mình phải nạp văn bản đó vào để huấn luyện lại các tham số của mô hình thì nó mới nhớ được lâu dài.",
+        defaultCorrectText: "RAG chỉ tra cứu tài liệu lúc người dùng hỏi rồi nhét vào ngữ cảnh cho mô hình đọc, không train lại mô hình.",
+        defaultRetryText: "RAG không phải là train lại mô hình vì train lại rất tốn kém và lâu. RAG giống như việc tra cứu tài liệu quy chế mới rồi copy đính kèm vào câu hỏi để LLM đọc và trả lời luôn."
+      },
+      {
+        id: 2,
+        indexLabel: "CÂU HỎI 2 / 2",
+        stepTag: "BƯỚC II / V · CÂU HỎI 2 / 2",
+        progressBadge: "Tiến độ: Câu 2 / 2",
+        concept: "Kỹ thuật RAG: Giới hạn Context Window & Chunking",
+        question: "Tài liệu quy chế nội bộ của công ty dài tới 100 trang A4 (~40.000 từ). Khi người dùng hỏi một điều khoản nhỏ, cơ chế RAG sẽ xử lý văn bản 100 trang này như thế nào để đưa vào cho LLM trả lời?",
+        choices: [
+          {
+            id: "A",
+            text: "<strong>Nhồi nhét toàn bộ 100 trang văn bản</strong> vào thẳng Prompt một lúc để mô hình đọc đầy đủ nhất có thể.",
+            isCorrect: false,
+            misconceptionTitle: "Phát hiện điểm nghẽn: Ngộ nhận Context Window vô hạn và hiện tượng nhiễu thông tin",
+            userSummary: "Nhồi nhét cả 100 trang sẽ làm tràn context window, tốn kém chi phí token rất lớn và khiến LLM dễ bị ảo giác hoặc bỏ sót thông tin ở giữa (hiện tượng Lost in the middle)."
+          },
+          {
+            id: "B",
+            text: "<strong>Chia nhỏ tài liệu thành các đoạn (Chunking)</strong>, dùng Vector Search chỉ trích xuất đúng 2-3 đoạn liên quan nhất (Top-k) để đưa vào Prompt.",
+            isCorrect: true
+          },
+          {
+            id: "C",
+            text: "<strong>Mã hóa 100 trang thành file zip</strong> rồi gửi link cho LLM tự tải về giải nén.",
+            isCorrect: false,
+            misconceptionTitle: "Phát hiện ngộ nhận: LLM không tự tải và giải nén file ngoài môi trường",
+            userSummary: "LLM thuần túy chỉ nhận văn bản dạng chuỗi ký tự (text tokens) trong context window, không tự chạy thao tác giải nén file zip."
+          }
+        ],
+        hint: "Hãy thử suy nghĩ: Cửa sổ ngữ cảnh (Context Window) của LLM có giới hạn và xử lý văn bản quá dài rất tốn chi phí lẫn dễ bị phân tâm. Nếu người dùng chỉ hỏi 1 câu nhỏ, việc cắt nhỏ tài liệu và chỉ lấy đúng đoạn văn liên quan nhất (Top-k chunks) sẽ giúp ích gì?",
+        source: "Tài liệu VLearn AI Base · Section 3.2: Chunking & Vector Similarity Search",
+        correctFeedback: "Rất chính xác! Trong thực tế, kỹ thuật RAG luôn đi kèm 'Chunking' (chia nhỏ) và 'Top-k Retrieval'. Ta không nhét cả 100 trang vào prompt mà chỉ nhét các đoạn có độ tương đồng cao nhất với câu hỏi để tiết kiệm token và tránh nhiễu.",
+        defaultMisconceptionText: "Em nghĩ cứ copy hết 100 trang vào prompt cho AI đọc từ đầu đến cuối là chắc chắn không bị thiếu ý.",
+        defaultCorrectText: "Không nên nhét cả 100 trang vì sẽ tràn context window và làm AI bị nhiễu. Cần chia nhỏ (chunking) và chỉ lấy 2-3 đoạn sát nhất đưa vào prompt.",
+        defaultRetryText: "Không thể nhét 100 trang vào prompt vì tràn ngữ cảnh và tốn tiền. Cần chia nhỏ tài liệu thành các đoạn chunk rồi dùng vector search tìm đúng đoạn liên quan đưa vào."
+      }
+    ];
+
+    let currentQuestionIdx = 0; // 0 = Question 1, 1 = Question 2
+    let currentStep = 1;
+    let selectedChoice = 'A';
+    let currentScenario = 'sufficient';
+
+    // Switch between Interactive Mockup and Flowchart Diagram
+    function switchMainView(mode) {
+      const interactiveView = document.getElementById('interactive-view');
+      const diagramView = document.getElementById('diagram-view');
+      const stepNavBar = document.getElementById('step-nav-bar');
+      const btnInteractive = document.getElementById('btn-mode-interactive');
+      const btnDiagram = document.getElementById('btn-mode-diagram');
+
+      if (mode === 'diagram') {
+        interactiveView.style.display = 'none';
+        diagramView.style.display = 'block';
+        stepNavBar.style.display = 'none';
+        btnDiagram.classList.add('active');
+        btnInteractive.classList.remove('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        interactiveView.style.display = 'block';
+        diagramView.style.display = 'none';
+        stepNavBar.style.display = 'flex';
+        btnInteractive.classList.add('active');
+        btnDiagram.classList.remove('active');
+        goToStep(currentStep);
+      }
+    }
+
+    // Step navigation
+    function goToStep(stepNum) {
+      currentStep = stepNum;
+      for (let i = 1; i <= 5; i++) {
+        const screen = document.getElementById(`screen-${i}`);
+        if (screen) {
+          screen.classList.toggle('active', i === stepNum);
+        }
+      }
+
+      for (let i = 1; i <= 5; i++) {
+        const pill = document.getElementById(`pill-step-${i}`);
+        if (pill) {
+          pill.classList.toggle('active', i === stepNum);
+          pill.classList.toggle('done', i < stepNum);
+        }
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Load Question into Screen 2
+    function renderQuestion(idx) {
+      currentQuestionIdx = idx;
+      const q = questionsData[idx];
+
+      // Update question text and headers
+      document.getElementById('quiz-step-tag').textContent = q.stepTag;
+      document.getElementById('quiz-breadcrumb-tag').textContent = q.concept.split(':')[1] || q.concept;
+      document.getElementById('quiz-progress-badge').textContent = q.progressBadge;
+      document.getElementById('question-concept-tag').textContent = q.concept;
+      document.getElementById('question-text-el').textContent = q.question;
+
+      // Update choices
+      document.getElementById('choice-text-A').innerHTML = q.choices[0].text;
+      document.getElementById('choice-text-B').innerHTML = q.choices[1].text;
+      document.getElementById('choice-text-C').innerHTML = q.choices[2].text;
+
+      // Reset selection
+      selectChoice('A');
+      fillPreset('misconception');
+    }
+
+    // Choice selection
+    function selectChoice(letter) {
+      selectedChoice = letter;
+      ['A', 'B', 'C'].forEach(l => {
+        const el = document.getElementById(`choice-${l}`);
+        if (el) el.classList.toggle('selected', l === letter);
+      });
+    }
+
+    // Presets
+    function fillPreset(type) {
+      const q = questionsData[currentQuestionIdx];
+      const textarea = document.getElementById('user-explanation');
+
+      if (type === 'misconception') {
+        selectChoice('A');
+        textarea.value = q.defaultMisconceptionText;
+        setScenario('sufficient');
+      } else if (type === 'correct') {
+        selectChoice('B');
+        textarea.value = q.defaultCorrectText;
+      } else {
+        selectChoice('C');
+        textarea.value = "Em thấy câu này khó quá, chọn bừa thôi chứ chưa hiểu gì ạ.";
+        setScenario('insufficient');
+      }
+    }
+
+    // Scenario changer
+    function changeScenario(val) {
+      setScenario(val);
+      if (currentStep === 3) {
+        goToStep(3);
+      }
+    }
+
+    function setScenario(scen) {
+      currentScenario = scen;
+      const selector = document.getElementById('scenario-selector');
+      if (selector) selector.value = scen;
+    }
+
+    // Simulate feedback directly for testing
+    function simulateFeedback(type) {
+      if (type === 'correct') {
+        selectChoice('B');
+        submitStep2();
+      } else if (type === 'wrong') {
+        selectChoice('A');
+        document.getElementById('user-explanation').value = questionsData[currentQuestionIdx].defaultMisconceptionText;
+        submitStep2();
+      } else {
+        selectChoice('C');
+        document.getElementById('user-explanation').value = "Khó quá em không biết";
+        submitStep2();
+      }
+    }
+
+    // Submit Step 2 & Check Right/Wrong
+    function submitStep2() {
+      const q = questionsData[currentQuestionIdx];
+      const chosenChoiceObj = q.choices.find(c => c.id === selectedChoice);
+      const text = document.getElementById('user-explanation').value.trim();
+
+      const elCorrect = document.getElementById('ai-result-correct');
+      const elSuff = document.getElementById('ai-result-sufficient');
+      const elInsuff = document.getElementById('ai-result-insufficient');
+
+      // Check if user answered vague / insufficient
+      if (text.toLowerCase().includes('khó quá') || text.toLowerCase().includes('chọn bừa') || text.length < 15) {
+        elCorrect.style.display = 'none';
+        elSuff.style.display = 'none';
+        elInsuff.style.display = 'block';
+        document.getElementById('clarify-text').textContent = q.hint;
+      }
+      // Check if user answered CORRECT (Option B)
+      else if (chosenChoiceObj && chosenChoiceObj.isCorrect) {
+        elCorrect.style.display = 'block';
+        elSuff.style.display = 'none';
+        elInsuff.style.display = 'none';
+
+        document.getElementById('correct-feedback-desc').textContent = q.correctFeedback;
+        document.getElementById('correct-source-tag').textContent = q.source;
+
+        // Button label for next step
+        const nextBtn = document.getElementById('btn-next-q-from-correct');
+        if (currentQuestionIdx === 0) {
+          nextBtn.textContent = "Qua câu tiếp theo → (Câu 2 / 2)";
+        } else {
+          nextBtn.textContent = "Hoàn thành bài luyện tập & Xem tổng kết →";
+        }
+      }
+      // User answered INCORRECT (Option A or C) - Track D2 Misconception
+      else {
+        elCorrect.style.display = 'none';
+        elSuff.style.display = 'block';
+        elInsuff.style.display = 'none';
+
+        document.getElementById('wrong-detected-title').textContent = chosenChoiceObj.misconceptionTitle || "Phát hiện điểm nghẽn nhận thức";
+        document.getElementById('wrong-user-summary').textContent = chosenChoiceObj.userSummary || "Bạn đang có sự nhầm lẫn về khái niệm.";
+        document.getElementById('minimal-hint-text').textContent = q.hint;
+        document.getElementById('hint-source-text').textContent = q.source;
+
+        // Prepare retry screen
+        document.getElementById('retry-hint-display').innerHTML = `<em>"${q.hint}"</em>`;
+        document.getElementById('retry-explanation').value = q.defaultRetryText;
+        document.getElementById('retry-success-box').style.display = 'none';
+        document.getElementById('retry-next-container').style.display = 'none';
+        document.getElementById('btn-verify-retry').style.display = 'inline-flex';
+      }
+
+      goToStep(3);
+    }
+
+    // Submit Step 4 (Retry)
+    function submitRetry() {
+      const q = questionsData[currentQuestionIdx];
+      const retryText = document.getElementById('retry-explanation').value.trim();
+
+      // Update final comparison in Step 5
+      if (currentQuestionIdx === 0) {
+        const finalAfter1 = document.getElementById('final-after-text-1');
+        if (finalAfter1 && retryText) {
+          finalAfter1.innerHTML = `<em>"${retryText}"</em>`;
+        }
+      } else {
+        const finalAfter2 = document.getElementById('final-after-text-2');
+        if (finalAfter2 && retryText) {
+          finalAfter2.innerHTML = `Đã hiểu đúng: <em>"${retryText}"</em>`;
+        }
+      }
+
+      // Show success notification on screen 4
+      document.getElementById('retry-success-box').style.display = 'block';
+      document.getElementById('btn-verify-retry').style.display = 'none';
+
+      const nextContainer = document.getElementById('retry-next-container');
+      const nextBtn = document.getElementById('btn-next-q-from-retry');
+      nextContainer.style.display = 'block';
+
+      if (currentQuestionIdx === 0) {
+        nextBtn.textContent = "Qua câu tiếp theo → (Câu 2 / 2)";
+      } else {
+        nextBtn.textContent = "Hoàn thành bài luyện tập & Xem tổng kết →";
+      }
+    }
+
+    // Transition to Next Question or Final Step
+    function goToNextQuestion() {
+      if (currentQuestionIdx === 0) {
+        // Move to Question 2
+        renderQuestion(1);
+        goToStep(2);
+      } else {
+        // Finished both questions -> Move to Step 5
+        goToStep(5);
+      }
+    }
+
+    // Restart Quiz helpers
+    function restartQuiz() {
+      renderQuestion(0);
+      goToStep(1);
+    }
+
+    function restartQuizToQ1() {
+      renderQuestion(0);
+      goToStep(2);
+    }
+
+    // Default init on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQuestion(0);
+    });
+  </script>
+</body>
+</html>
