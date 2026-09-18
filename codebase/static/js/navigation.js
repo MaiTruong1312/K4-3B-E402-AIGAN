@@ -2,15 +2,33 @@ function switchMainView(mode) {
   const interactiveView = document.getElementById('interactive-view');
   const diagramView = document.getElementById('diagram-view');
   const stepNavBar = document.getElementById('step-nav-bar');
+  const instructorPanel = document.getElementById('instructor-panel');
   const btnInteractive = document.getElementById('btn-mode-interactive');
   const btnDiagram = document.getElementById('btn-mode-diagram');
   const showingDiagram = mode === 'diagram';
-  interactiveView.style.display = showingDiagram ? 'none' : 'block';
-  diagramView.style.display = showingDiagram ? 'block' : 'none';
-  stepNavBar.style.display = showingDiagram ? 'none' : 'flex';
+  const role = localStorage.getItem('vlearn_role');
+
+  if (showingDiagram) {
+    interactiveView.style.display = 'none';
+    diagramView.style.display = 'block';
+    stepNavBar.style.display = 'none';
+    if (instructorPanel) instructorPanel.style.display = 'none';
+  } else {
+    diagramView.style.display = 'none';
+    if (role === 'teacher') {
+      interactiveView.style.display = 'none';
+      stepNavBar.style.display = 'none';
+      if (instructorPanel) instructorPanel.style.display = 'block';
+    } else {
+      interactiveView.style.display = 'block';
+      stepNavBar.style.display = 'flex';
+      if (instructorPanel) instructorPanel.style.display = 'none';
+      goToStep(currentStep);
+    }
+  }
+
   btnDiagram.classList.toggle('active', showingDiagram);
   btnInteractive.classList.toggle('active', !showingDiagram);
-  if (!showingDiagram) goToStep(currentStep);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

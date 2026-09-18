@@ -29,8 +29,6 @@ ROOT = Path(__file__).resolve().parent
 TEMPLATE_ROOT = ROOT / "templates"
 PAGE_PARTS = (
     "layout/start.html",
-    "components/auth-gate.html",
-    "components/instructor-panel.html",
     "screens/01-dashboard.html",
     "screens/02-quiz.html",
     "screens/03-feedback.html",
@@ -39,6 +37,8 @@ PAGE_PARTS = (
     "views/flowchart.html",
     "layout/end.html",
 )
+PAGE_PARTS_STUDENT = PAGE_PARTS
+PAGE_PARTS_TEACHER = PAGE_PARTS
 app = FastAPI(title="Mistake Loop", version="0.1.0")
 app.mount("/static", StaticFiles(directory=ROOT / "static"), name="static")
 
@@ -53,8 +53,16 @@ def startup() -> None:
 
 
 @app.get("/")
+@app.get("/student")
 def index() -> HTMLResponse:
-    html = "\n".join((TEMPLATE_ROOT / part).read_text(encoding="utf-8") for part in PAGE_PARTS)
+    html = "\n".join((TEMPLATE_ROOT / part).read_text(encoding="utf-8") for part in PAGE_PARTS_STUDENT)
+    return HTMLResponse(html)
+
+
+@app.get("/instructor")
+@app.get("/teacher")
+def instructor_dashboard() -> HTMLResponse:
+    html = "\n".join((TEMPLATE_ROOT / part).read_text(encoding="utf-8") for part in PAGE_PARTS_TEACHER)
     return HTMLResponse(html)
 
 
@@ -71,6 +79,30 @@ def sources() -> dict[str, Any]:
 @app.get("/api/lesson")
 def lesson() -> dict[str, Any]:
     return lesson_content()
+
+
+@app.get("/api/lesson/overview")
+def lesson_overview() -> dict[str, Any]:
+    """Return lesson metadata + top BM25 transcript passages for preview."""
+    try:
+        from .knowledge_base import retrieve as kb_retrieve
+    except ImportError:
+        from knowledge_base import retrieve as kb_retrieve
+
+    content = lesson_content()
+    query = f"{content['title']} {content['scope']}"
+    passages = kb_retrieve(query, limit=6)
+    return {
+        "title": content["title"],
+        "scope": content["scope"],
+        "key_passages": [
+            {"id": p["id"], "text": p["text"][:300]} for p in passages
+        ],
+        "question_topics": [
+            {"id": q["id"], "concept": q.get("concept", ""), "type": q.get("type", "")}
+            for q in content["questions"]
+        ],
+    }
 
 
 @app.post("/api/session")

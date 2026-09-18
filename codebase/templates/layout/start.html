@@ -10,57 +10,15 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/foundation.css?v=3">
-  <link rel="stylesheet" href="/static/css/dashboard.css?v=3">
-  <link rel="stylesheet" href="/static/css/learning-flow.css?v=3">
-  <link rel="stylesheet" href="/static/css/blueprint.css?v=3">
+  <link rel="stylesheet" href="/static/css/foundation.css?v=20000">
+  <link rel="stylesheet" href="/static/css/dashboard.css?v=20000">
+  <link rel="stylesheet" href="/static/css/learning-flow.css?v=20000">
+  <link rel="stylesheet" href="/static/css/blueprint.css?v=20000">
 </head>
 
 <body>
 
   <!-- ================= TOP HACKATHON CP2 CONTROL BAR ================= -->
-  <div class="hackathon-bar">
-    <div class="hackathon-info">
-      <span class="cp2-badge">CHECKPOINT CP2</span>
-      <span class="track-badge">TRACK D2 · HỌC TỪ LỖI TRƯỚC</span>
-      <span>HỌC VIỆN AIGAN · NHÓM K4-3B-E402-AIGAN</span>
-    </div>
-    <div class="hackathon-actions">
-      <button class="view-switch-btn active" id="btn-mode-interactive" onclick="switchMainView('interactive')">
-        <span>▣</span> Bản Mock Bấm Được
-      </button>
-      <button class="view-switch-btn" id="btn-mode-diagram" onclick="switchMainView('diagram')">
-        <span>◫</span> Sơ Đồ Luồng (Flowchart)
-      </button>
-    </div>
-  </div>
-
-  <!-- STEP NAVIGATION PILLS (Click to jump anywhere) -->
-  <div class="step-nav-wrapper" id="step-nav-bar">
-    <ul class="step-nav-list">
-      <li class="step-pill active" id="pill-step-1" onclick="goToStep(1)">
-        <span class="num">I</span>
-        <span>Dashboard VLearn</span>
-      </li>
-      <li class="step-pill" id="pill-step-2" onclick="goToStep(2)">
-        <span class="num">II</span>
-        <span>Làm bài thử (Trước lý thuyết)</span>
-      </li>
-      <li class="step-pill" id="pill-step-3" onclick="goToStep(3)">
-        <span class="num">III</span>
-        <span>AI Quyết định & Gợi ý</span>
-      </li>
-      <li class="step-pill" id="pill-step-4" onclick="goToStep(4)">
-        <span class="num">IV</span>
-        <span>Học viên Thử lại</span>
-      </li>
-      <li class="step-pill" id="pill-step-5" onclick="goToStep(5)">
-        <span class="num">V</span>
-        <span>Hoàn thành & Mở lý thuyết</span>
-      </li>
-    </ul>
-  </div>
-
   <!-- ================= VLEARN ACADEMY HEADER ================= -->
   <header class="vlearn-header">
     <div class="vlearn-left">
@@ -135,9 +93,57 @@
     </div>
   </header>
 
+  <!-- ================= AUTH GATE (must be OUTSIDE main.container) ================= -->
+  <div class="auth-gate" id="auth-gate">
+    <div class="auth-card" style="position: relative;">
+      <button class="citation-close" type="button" aria-label="Đóng" onclick="closeAuthGate()"
+        style="position: absolute; top: 16px; right: 16px;">×</button>
+      <div class="eyebrow">VLEARN · NHẬN DIỆN NGƯỜI DÙNG</div>
+      <h1>Vào không gian học tập</h1>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="auth-tab-student" type="button" onclick="switchAuthRole('student')">Học
+          viên</button>
+        <button class="auth-tab" id="auth-tab-teacher" type="button" onclick="switchAuthRole('teacher')">Giảng
+          viên</button>
+      </div>
+      <form id="student-login-form" onsubmit="loginStudent(event)">
+        <label for="student-code">Mã sinh viên</label>
+        <input id="student-code" name="student-code" autocomplete="username" maxlength="40" required
+          placeholder="Nhập mã sinh viên (ví dụ: SV2026001)">
+        <div style="margin-top: 8px; font-size: 12px; color: var(--charcoal);">
+          Mã thử mẫu: <a href="javascript:void(0)" onclick="document.getElementById('student-code').value='SV2026001'"
+            style="text-decoration: underline; font-weight: bold;">SV2026001</a> · <a href="javascript:void(0)"
+            onclick="document.getElementById('student-code').value='SV2026002'"
+            style="text-decoration: underline; font-weight: bold;">SV2026002</a>
+        </div>
+        <button class="btn-primary" type="submit" style="margin-top: 14px;">Bắt đầu học →</button>
+      </form>
+      <form id="teacher-login-form" style="display:none" onsubmit="loginTeacher(event)">
+        <label for="teacher-username">Tài khoản giảng viên</label>
+        <input id="teacher-username" autocomplete="username" required placeholder="admin" value="admin">
+        <label for="teacher-password">Mật khẩu</label>
+        <input id="teacher-password" type="password" autocomplete="current-password" required placeholder="admin"
+          value="admin">
+        <button class="btn-primary" type="submit" style="margin-top: 14px;">Mở báo cáo lớp →</button>
+      </form>
+      <p class="auth-error" id="auth-error" role="alert"></p>
+    </div>
+  </div>
+
+  <!-- ================= INSTRUCTOR PANEL (must be OUTSIDE main.container) ================= -->
+  <section class="instructor-panel" id="instructor-panel" style="display:none">
+    <div class="instructor-panel-head">
+      <div>
+        <div class="eyebrow">VLEARN · GIẢNG VIÊN</div>
+        <h1>Báo cáo lớp học</h1>
+      </div>
+      <button class="btn-secondary" type="button" onclick="logoutUser()">Đăng xuất</button>
+    </div>
+    <div id="instructor-report-content"></div>
+  </section>
+
   <!-- ================= MAIN CONTAINER ================= -->
   <main class="container">
 
     <!-- VIEW 1: INTERACTIVE PROTOTYPE (SCREENS 1 TO 5) -->
     <div id="interactive-view">
-
