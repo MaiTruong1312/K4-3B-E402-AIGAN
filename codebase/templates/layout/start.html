@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VLearn International Academy | CP2 - Luồng Hoạt Động (Track D2)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/foundation.css?v=3">
+  <link rel="stylesheet" href="/static/css/dashboard.css?v=3">
+  <link rel="stylesheet" href="/static/css/learning-flow.css?v=3">
+  <link rel="stylesheet" href="/static/css/blueprint.css?v=3">
+</head>
+
+<body>
+
+  <!-- ================= TOP HACKATHON CP2 CONTROL BAR ================= -->
+  <div class="hackathon-bar">
+    <div class="hackathon-info">
+      <span class="cp2-badge">CHECKPOINT CP2</span>
+      <span class="track-badge">TRACK D2 · HỌC TỪ LỖI TRƯỚC</span>
+      <span>HỌC VIỆN AIGAN · NHÓM K4-3B-E402-AIGAN</span>
+    </div>
+    <div class="hackathon-actions">
+      <button class="view-switch-btn active" id="btn-mode-interactive" onclick="switchMainView('interactive')">
+        <span>▣</span> Bản Mock Bấm Được
+      </button>
+      <button class="view-switch-btn" id="btn-mode-diagram" onclick="switchMainView('diagram')">
+        <span>◫</span> Sơ Đồ Luồng (Flowchart)
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP NAVIGATION PILLS (Click to jump anywhere) -->
+  <div class="step-nav-wrapper" id="step-nav-bar">
+    <ul class="step-nav-list">
+      <li class="step-pill active" id="pill-step-1" onclick="goToStep(1)">
+        <span class="num">I</span>
+        <span>Dashboard VLearn</span>
+      </li>
+      <li class="step-pill" id="pill-step-2" onclick="goToStep(2)">
+        <span class="num">II</span>
+        <span>Làm bài thử (Trước lý thuyết)</span>
+      </li>
+      <li class="step-pill" id="pill-step-3" onclick="goToStep(3)">
+        <span class="num">III</span>
+        <span>AI Quyết định & Gợi ý</span>
+      </li>
+      <li class="step-pill" id="pill-step-4" onclick="goToStep(4)">
+        <span class="num">IV</span>
+        <span>Học viên Thử lại</span>
+      </li>
+      <li class="step-pill" id="pill-step-5" onclick="goToStep(5)">
+        <span class="num">V</span>
+        <span>Hoàn thành & Mở lý thuyết</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ================= VLEARN ACADEMY HEADER ================= -->
+  <header class="vlearn-header">
+    <div class="vlearn-left">
+      <div class="vlearn-logo" onclick="goToStep(1)">
+        <div class="vlearn-logo-icon">
+          <!-- Geometric Academic Monogram -->
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M4 5L12 20L20 5" stroke="#000000" stroke-width="2.5" stroke-linecap="square"
+              stroke-linejoin="miter" />
+            <line x1="8" y1="5" x2="16" y2="5" stroke="#000000" stroke-width="2" />
+          </svg>
+        </div>
+        <div class="vlearn-logo-text-wrap">
+          <span class="vlearn-logo-text">VLEARN</span>
+          <span class="vlearn-logo-sub">International Academy</span>
+        </div>
+      </div>
+      <nav>
+        <ul class="vlearn-nav">
+          <li class="vlearn-nav-item active" onclick="goToStep(1)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg>
+            Home
+          </li>
+          <li class="vlearn-nav-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            Courses
+          </li>
+          <li class="vlearn-nav-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            Practice <span class="vlearn-nav-badge badge-soon">Soon</span>
+          </li>
+          <li class="vlearn-nav-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10 2v7.31"></path>
+              <path d="M14 9.3V2"></path>
+              <path d="M8.5 2h7"></path>
+              <path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path>
+            </svg>
+            Lab <span class="vlearn-nav-badge badge-new">New</span>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="vlearn-right">
+      <div class="lang-toggle">
+        <span class="lang-opt">EN</span>
+        <span class="lang-opt active">VI</span>
+      </div>
+      <button class="icon-btn" title="Giao diện tối">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+      <button class="icon-btn" title="Thông báo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+      </button>
+      <button class="account-switch-button" id="account-switch-button" type="button" onclick="switchAccount()">
+        Đổi tài khoản
+      </button>
+      <div class="user-avatar" id="current-user-avatar" title="Học viên">HV</div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="container">
+
+    <!-- VIEW 1: INTERACTIVE PROTOTYPE (SCREENS 1 TO 5) -->
+    <div id="interactive-view">
+

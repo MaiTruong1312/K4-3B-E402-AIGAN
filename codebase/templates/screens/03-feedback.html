@@ -1,0 +1,170 @@
+      <!-- SCREEN 3: AI FEEDBACK (BIẾT ĐÚNG / SAI & GỢI Ý) -->
+      <!-- ============================================== -->
+      <section class="screen-view" id="screen-3">
+        <div class="flow-page-header">
+          <div class="flow-breadcrumb">
+            <a onclick="goToStep(1)">Dashboard</a> <span>/</span>
+            <a onclick="goToStep(2)">Làm bài trước lý thuyết</a> <span>/</span>
+            <span>Kết quả & Phản hồi</span>
+          </div>
+          <span class="step-tag">BƯỚC III / V · KẾT QUẢ & PHẢN HỒI AI</span>
+        </div>
+
+        <div class="flow-layout">
+          <div class="main-panel">
+
+            <!-- ======================================= -->
+            <!-- SUB-CASE 1: TRẢ LỜI ĐÚNG NGAY (CORRECT) -->
+            <!-- ======================================= -->
+            <div id="ai-result-correct" style="display: none;">
+              <!-- Banner Đúng -->
+              <div class="result-status-banner status-correct">
+                <div class="result-icon">✓</div>
+                <div>
+                  <div class="result-badge">KẾT QUẢ: CHÍNH XÁC</div>
+                  <div class="result-title">Xuất sắc! Bạn đã hiểu đúng bản chất của khái niệm này.</div>
+                  <div class="result-desc" id="correct-feedback-desc">
+                    RAG không huấn luyện lại mô hình mà truy xuất tài liệu liên quan tại thời điểm hỏi rồi đưa vào
+                    context window để LLM đọc và trả lời bám sát nguồn.
+                  </div>
+                </div>
+              </div>
+
+              <div class="source-box">
+                <div>
+                  <strong>Căn cứ tham khảo:</strong> <span id="correct-source-tag">Tài liệu VLearn AI Base · Khái niệm
+                    Context Injection</span>
+                </div>
+                <button class="source-link" type="button" onclick="openCitationModal()">
+                  Xem bài giảng ↗
+                </button>
+              </div>
+
+              <div class="btn-row">
+                <button class="btn-primary" type="button" id="btn-next-q-from-correct" onclick="goToNextQuestion()">
+                  Qua câu tiếp theo →
+                </button>
+                <button class="btn-secondary" type="button" onclick="goToStep(2)">
+                  Xem lại câu trả lời vừa gửi
+                </button>
+              </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!-- SUB-CASE 2: TRẢ LỜI SAI - ĐỦ CĂN CỨ     -->
+            <!-- ======================================= -->
+            <div id="ai-result-sufficient" style="display: block;">
+              <!-- Banner Sai -->
+              <div class="result-status-banner status-wrong">
+                <div class="result-icon">✗</div>
+                <div>
+                  <div class="result-badge">KẾT QUẢ: BẠN TRẢ LỜI CHƯA ĐÚNG</div>
+                  <div class="result-title" id="wrong-detected-title">Phát hiện điểm nghẽn: Bạn đang phân vân giữa RAG
+                    và Fine-tuning</div>
+                  <div class="result-desc" id="wrong-user-summary">
+                    Câu trả lời của bạn chọn phương án nhầm lẫn giữa cơ chế truy xuất ngữ cảnh và cơ chế huấn luyện lại
+                    trọng số mô hình.
+                  </div>
+                </div>
+              </div>
+
+              <div class="ai-decision-card">
+                <div class="decision-header">
+                  <div class="decision-icon">D2</div>
+                  <div>
+                    <span class="decision-badge">TRỢ LÝ SƯ PHẠM VLEARN · GỢI Ý TỐI THIỂU</span>
+                    <div class="decision-title">Hệ thống không cho sẵn đáp án để bạn có cơ hội tự tư duy lại:</div>
+                  </div>
+                </div>
+
+                <!-- MINIMAL HINT -->
+                <div class="hint-highlight-box">
+                  <div class="hint-highlight-label">
+                    <span>🔍</span> GỢI Ý PHẢN BIỆN TỐI THIỂU
+                  </div>
+                  <div class="hint-highlight-text" id="minimal-hint-text"></div>
+                </div>
+
+                <!-- SOURCE -->
+                <div class="source-box" style="margin-bottom: 0;">
+                  <div>
+                    <strong>Căn cứ tham khảo:</strong> <span id="hint-source-text"></span>
+                  </div>
+                  <button class="source-link" type="button" onclick="openCitationModal()">
+                    Xem trích dẫn ↗
+                  </button>
+                </div>
+              </div>
+
+              <div class="btn-row">
+                <button class="btn-primary" type="button" onclick="goToStep(4)">
+                  Tôi đã nhận ra! Thử sửa lại ngay →
+                </button>
+                <button class="btn-secondary" type="button" onclick="goToStep(2)">
+                  Xem lại câu hỏi ban đầu
+                </button>
+              </div>
+            </div>
+
+            <!-- ======================================= -->
+            <!-- SUB-CASE 3: TRẢ LỜI MƠ HỒ - CHƯA ĐỦ CĂN CỨ -->
+            <!-- ======================================= -->
+            <div id="ai-result-insufficient" style="display: none;">
+              <div class="result-status-banner status-wrong">
+                <div class="result-icon">?</div>
+                <div>
+                  <div class="result-badge">KẾT QUẢ: CHƯA ĐỦ CĂN CỨ KẾT LUẬN</div>
+                  <div class="result-title">Chưa đủ dữ kiện để xác định nguyên nhân bạn hiểu sai</div>
+                  <div class="result-desc">
+                    Câu giải thích của bạn quá ngắn hoặc chưa thể hiện chuỗi suy luận logic, nên AI <strong>không thể
+                      vội vàng phán xét bạn hiểu sai ở khái niệm nào</strong> (tránh củng cố thông tin sai lệch).
+                  </div>
+                </div>
+              </div>
+
+              <div class="hint-highlight-box">
+                <div class="hint-highlight-label">
+                  <span>💬</span> CÂU HỎI LÀM RÕ
+                </div>
+                <div class="hint-highlight-text" id="clarify-text"></div>
+              </div>
+
+              <div class="learning-route-card" id="learning-route-card" style="display: none;">
+                <div class="learning-route-label">ĐỌC TÀI LIỆU GỐC TRƯỚC KHI THỬ LẠI</div>
+                <p>Hệ thống chưa có đủ cách suy luận của bạn để phân tích lỗi. Đây là các đoạn bài giảng VLearn được truy xuất trực tiếp, không phải nội dung AI tự tạo.</p>
+                <div id="learning-route-sources"></div>
+                <button class="btn-secondary" type="button" onclick="openCitationModal()">Mở đầy đủ tài liệu được trích dẫn ↗</button>
+              </div>
+
+              <div class="btn-row">
+                <button class="btn-primary" type="button" onclick="goToStep(2)">
+                  Quay lại bổ sung thêm giải thích ↩
+                </button>
+                <button class="btn-secondary" type="button" onclick="setScenario('sufficient')">
+                  Chuyển sang kịch bản Đủ căn cứ
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ASIDE CONTEXT -->
+          <div class="flow-aside">
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>🛡️</span> Vì sao không cho luôn đáp án?
+              </div>
+              <div class="spec-card-body">
+                Khảo sát chỉ ra <strong>67.7%</strong> người học khi thấy lời giải sẽ bấm theo ngay mà không tự hiểu bản
+                chất.
+                <br><br>
+                Cơ chế D2 giữ lại đáp án, đưa gợi ý tối thiểu để người học <strong>tự sửa lại đúng</strong> rồi mới
+                chuyển sang câu tiếp theo.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->

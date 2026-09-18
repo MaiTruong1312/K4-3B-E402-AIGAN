@@ -75,5 +75,56 @@ def initialize() -> None:
     with connection() as conn:
         for statement in statements:
             conn.execute(statement)
+        existing_columns = {row[1] for row in conn.execute("PRAGMA table_info(attempts)")}
+        migrations = {
+            "request_id": "TEXT",
+            "question_id": "TEXT",
+            "question_version": "TEXT NOT NULL DEFAULT '1'",
+            "assessment_type": "TEXT",
+            "engagement_status": "TEXT",
+            "support_counted": "INTEGER NOT NULL DEFAULT 0",
+        }
+        for column, definition in migrations.items():
+            if column not in existing_columns:
+                conn.execute(f"ALTER TABLE attempts ADD COLUMN {column} {definition}")
+        session_columns = {row[1] for row in conn.execute("PRAGMA table_info(sessions)")}
+        session_migrations = {
+            "role": "TEXT NOT NULL DEFAULT 'student'",
+            "actor_id": "TEXT",
+        }
+        for column, definition in session_migrations.items():
+            if column not in session_columns:
+                conn.execute(f"ALTER TABLE sessions ADD COLUMN {column} {definition}")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_sessions_actor ON sessions(role, actor_id, status)")
+        conn.execute(
+            """CREATE TABLE IF NOT EXISTS misconception_history (
+                session_id TEXT NOT NULL,
+                concept TEXT NOT NULL,
+                misconception_id TEXT NOT NULL,
+                misconception TEXT,
+                occurrence_count INTEGER NOT NULL DEFAULT 1,
+                status TEXT NOT NULL DEFAULT 'active',
+                first_seen_at TEXT NOT NULL,
+                last_seen_at TEXT NOT NULL,
+                resolved_at TEXT,
+                PRIMARY KEY(session_id, concept, misconception_id),
+                FOREIGN KEY(session_id) REFERENCES sessions(id) ON DELETE CASCADE
+            )"""
+        )
+        conn.execute(
+            """CREATE TABLE IF NOT EXISTS question_flags (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT NOT NULL,
+                question_id TEXT NOT NULL,
+                issue TEXT NOT NULL,
+                source_ids TEXT NOT NULL DEFAULT '[]',
+                status TEXT NOT NULL DEFAULT 'pending_review',
+                created_at TEXT NOT NULL,
+                FOREIGN KEY(session_id) REFERENCES sessions(id) ON DELETE CASCADE
+            )"""
+        )
+        conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_attempts_request_id ON attempts(request_id) WHERE request_id IS NOT NULL")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_attempts_session_question ON attempts(session_id, question_id, created_at)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_question_flags_status ON question_flags(status, created_at)")
         conn.execute("PRAGMA optimize")
 

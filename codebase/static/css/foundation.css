@@ -1,0 +1,510 @@
+/* ========================================================= */
+    /* DESIGN SYSTEM: ELITE INTERNATIONAL ACADEMY (MONOCHROME)   */
+    /* STARK WHITE BACKGROUND, BLACK DETAILS, ZERO RADIUS        */
+    /* ========================================================= */
+    :root {
+      --bg-page: #ffffff;
+      --bg-card: #ffffff;
+      --bg-subtle: #fafafa;
+      --bg-subtle-2: #f4f4f4;
+      --bg-black: #000000;
+
+      --black: #000000;
+      --black-rich: #0a0a0a;
+      --charcoal: #1f1f1f;
+      --steel: #404040;
+      --text-muted: #595959;
+      --text-light: #737373;
+
+      --border-solid: #000000;
+      --border-bold: 2px solid #000000;
+      --border-thin: 1px solid #000000;
+      --border-hairline: 1px solid #e0e0e0;
+      --border-mid: 1px solid #8c8c8c;
+
+      --shadow-crisp: 3px 3px 0px #000000;
+      --shadow-crisp-lg: 5px 5px 0px #000000;
+      --shadow-crisp-sm: 2px 2px 0px #000000;
+    }
+
+    /* STRICT GEOMETRIC ANGULAR RULES - NO ROUNDED CORNERS ANYWHERE */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-radius: 0px !important;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--black);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* TYPOGRAPHY HIERARCHY */
+    h1,
+    h2,
+    h3,
+    h4,
+    .serif-font {
+      font-family: 'Playfair Display', Georgia, serif;
+      letter-spacing: -0.015em;
+      color: var(--black);
+      font-weight: 700;
+    }
+
+    .academic-serif,
+    .vlearn-logo-text,
+    .academic-title,
+    .track-badge,
+    .cp2-badge,
+    .card-title,
+    .meta-tag,
+    .f-role,
+    .step-tag,
+    .btn-academic,
+    .roman-num {
+      font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ========================================================= */
+    /* TOP CONTROL BAR (HACKATHON EVALUATION CONTROLS)            */
+    /* ========================================================= */
+    .hackathon-bar {
+      background: var(--black);
+      color: #ffffff;
+      padding: 10px 32px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--black);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      letter-spacing: 0.08em;
+    }
+
+    .hackathon-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cp2-badge {
+      background: #ffffff;
+      color: var(--black);
+      font-weight: 900;
+      font-size: 10px;
+      padding: 4px 10px;
+      border: 1px solid #ffffff;
+      letter-spacing: 0.16em;
+    }
+
+    .track-badge {
+      background: transparent;
+      color: #ffffff;
+      font-size: 10px;
+      padding: 4px 10px;
+      border: 1px solid #ffffff;
+      font-weight: 700;
+    }
+
+    .hackathon-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .view-switch-btn {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid #ffffff;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.15s ease;
+    }
+
+    .view-switch-btn:hover {
+      background: #222222;
+    }
+
+    .view-switch-btn.active {
+      background: #ffffff;
+      color: var(--black);
+      border-color: #ffffff;
+      font-weight: 800;
+    }
+
+    /* STEP NAVIGATION PILL BAR */
+    .step-nav-wrapper {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-solid);
+      padding: 10px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      overflow-x: auto;
+    }
+
+    .step-nav-list {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: #ffffff;
+      cursor: pointer;
+      border: 1px solid var(--border-hairline);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .step-pill:hover {
+      border-color: var(--black);
+      color: var(--black);
+    }
+
+    .step-pill.active {
+      background: var(--black);
+      color: #ffffff;
+      border-color: var(--black);
+    }
+
+    .step-pill.done {
+      background: var(--bg-subtle);
+      color: var(--black);
+      border-color: var(--black);
+    }
+
+    .step-pill .num {
+      width: 18px;
+      height: 18px;
+      background: #eeeeee;
+      color: var(--black);
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      font-weight: 800;
+      border: 1px solid var(--black);
+    }
+
+    .step-pill.active .num {
+      background: #ffffff;
+      color: var(--black);
+      border-color: #ffffff;
+    }
+
+    .step-pill.done .num {
+      background: var(--black);
+      color: #ffffff;
+      border-color: var(--black);
+    }
+
+    .step-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .step-nav-right select {
+      background: #ffffff;
+      color: var(--black);
+      border: 1px solid var(--border-solid);
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+    }
+
+    /* ========================================================= */
+    /* VLEARN INTERNATIONAL ACADEMY HEADER                        */
+    /* ========================================================= */
+    .vlearn-header {
+      background: #ffffff;
+      border-bottom: 2px solid var(--black);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 74px;
+    }
+
+    .vlearn-left {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+    }
+
+    .vlearn-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .vlearn-logo-icon {
+      width: 38px;
+      height: 38px;
+      border: 2px solid var(--black);
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      box-shadow: 2px 2px 0px #000000;
+    }
+
+    .vlearn-logo-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .vlearn-logo-text {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: 0.16em;
+      line-height: 1;
+    }
+
+    .vlearn-logo-sub {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .vlearn-nav {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .vlearn-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 26px 0;
+      position: relative;
+      cursor: pointer;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .vlearn-nav-item:hover {
+      color: var(--black);
+    }
+
+    .vlearn-nav-item.active {
+      color: var(--black);
+      font-weight: 800;
+    }
+
+    .vlearn-nav-item.active::after {
+      content: "";
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--black);
+    }
+
+    .vlearn-nav-badge {
+      font-size: 9px;
+      padding: 2px 6px;
+      border: 1px solid var(--black);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .badge-soon {
+      background: #ffffff;
+      color: var(--text-muted);
+      border-color: #999999;
+    }
+
+    .badge-new {
+      background: var(--black);
+      color: #ffffff;
+      border-color: var(--black);
+    }
+
+    .vlearn-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .lang-toggle {
+      display: flex;
+      border: 1px solid var(--black);
+      background: #ffffff;
+      padding: 0;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .lang-opt {
+      padding: 5px 9px;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .lang-opt.active {
+      background: var(--black);
+      color: #ffffff;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: 1px solid var(--black);
+      color: var(--black);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      transition: all 0.15s;
+    }
+
+    .icon-btn:hover {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--black);
+      background: var(--black);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* ========================================================= */
+    /* LAYOUT & MAIN CONTAINER                                   */
+    /* ========================================================= */
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 36px 32px 70px;
+    }
+
+    .screen-view {
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .screen-view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(3px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ========================================================= */
+
+    .auth-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(255, 255, 255, .98);
+    }
+
+    .auth-card {
+      width: min(520px, 100%);
+      border: 2px solid var(--black);
+      box-shadow: 8px 8px 0 var(--black);
+      padding: 32px;
+      background: var(--white);
+    }
+
+    .auth-card h1 { margin: 8px 0 22px; font-family: var(--font-serif); }
+    .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 20px; }
+    .auth-tab { border: 1px solid var(--black); background: var(--white); padding: 11px; font-weight: 800; }
+    .auth-tab.active { color: var(--white); background: var(--black); }
+    .auth-card form label { display: block; margin: 13px 0 6px; font-size: 12px; font-weight: 800; letter-spacing: .06em; }
+    .auth-card form input { width: 100%; border: 1px solid var(--black); padding: 12px; margin-bottom: 10px; font: inherit; }
+    .auth-card form .btn-primary { width: 100%; margin-top: 10px; }
+    .auth-error { min-height: 20px; margin: 12px 0 0; color: #8b0000; font-size: 13px; }
+
+    .account-switch-button {
+      border: 1px solid var(--black);
+      background: var(--white);
+      color: var(--black);
+      padding: 7px 11px;
+      font: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .account-switch-button:hover { color: var(--white); background: var(--black); }
+
+    .instructor-panel { max-width: 1180px; margin: 110px auto 50px; padding: 0 24px; }
+    .instructor-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .instructor-report-card { border: 1px solid var(--black); box-shadow: 4px 4px 0 var(--black); padding: 20px; margin: 20px 0; }
+    .instructor-report-card h2 { font-family: var(--font-serif); margin-top: 0; }
+    .instructor-report-row { border-top: 1px solid #bbb; padding: 10px 0; font-size: 13px; }

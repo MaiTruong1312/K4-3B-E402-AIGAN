@@ -1,0 +1,215 @@
+      <!-- ============================================== -->
+      <!-- SCREEN 1: DASHBOARD VLEARN (ENTRY POINT)       -->
+      <!-- ============================================== -->
+      <section class="screen-view active" id="screen-1">
+        <div class="hero-welcome">
+          <div class="hero-meta-strip">
+            <span class="institutional-badge filled">FACULTY OF ARTIFICIAL INTELLIGENCE</span>
+            <span class="institutional-badge">TRACK D2 · ADAPTIVE PRE-TEST</span>
+            <span class="institutional-badge">COHORT L3-L4 · BATCH 04</span>
+          </div>
+          <h1 class="hero-title" id="student-welcome-title">Chào bạn đến với VLearn!</h1>
+          <div class="hero-sub">
+            <div class="hero-desc-text">
+              Hôm nay bạn bắt đầu nghiên cứu chuyên đề: <strong>Retrieval-Augmented Generation (RAG)</strong>.
+              Áp dụng phương pháp sư phạm hàn lâm <em>"Học từ lỗi trước: Làm bài rồi mới được giảng"</em>: Bạn hãy hoàn
+              thành bài luyện tập chẩn đoán (không tính điểm) để bộc lộ cách hiểu trực giác trước khi tiếp cận lý thuyết
+              chuyên sâu.
+            </div>
+            <div>
+              <button class="hero-cta-btn" onclick="goToStep(2)">
+                Bắt đầu làm bài thử thách →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <!-- LEFT COLUMN: MY COURSES -->
+          <div class="card-box">
+            <div class="card-header-row">
+              <span class="card-title">MY COURSES · CHƯƠNG TRÌNH ĐANG HỌC</span>
+              <a class="card-link" onclick="goToStep(2)">XEM TẤT CẢ ▶</a>
+            </div>
+
+            <!-- TABS -->
+            <div class="card-tabs">
+              <button class="tab-btn active">L3-L4 - Khóa 4 Phase 1</button>
+              <button class="tab-btn">Khoá 3 Phase 1</button>
+            </div>
+
+            <!-- LESSON LIST -->
+            <div class="lesson-list">
+
+              <!-- Day 1: In Progress with Track D2 Pre-test -->
+              <div class="lesson-row highlight" onclick="goToStep(2)"
+                title="Nhấn để bắt đầu làm bài luyện tập trước lý thuyết">
+                <div class="lesson-left">
+                  <div class="lesson-circle">▶</div>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                      <span class="lesson-name">Day 1: Day01 · Khái niệm RAG</span>
+                      <span class="lesson-badge badge-featured">LÀM BÀI TRƯỚC LÝ THUYẾT</span>
+                    </div>
+                    <div class="lesson-subtext">
+                      Track D2: Thử sức kiểm tra cách hiểu trực giác (không tính điểm) trước khi mở bài giảng lý thuyết
+                    </div>
+                  </div>
+                </div>
+                <span class="lesson-badge badge-in-progress">IN PROGRESS...</span>
+              </div>
+
+              <!-- Day 2 -->
+              <div class="lesson-row" onclick="alert('Day 02 sẽ mở khóa sau khi bạn hoàn thành các bài học trước!')">
+                <div class="lesson-left">
+                  <div class="lesson-circle">02</div>
+                  <div>
+                    <div class="lesson-name">Day 2: DAY02</div>
+                    <div class="lesson-subtext">Vector Database & Embeddings</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Day 3 -->
+              <div class="lesson-row" onclick="alert('Day 03 sẽ mở khóa sau khi bạn hoàn thành các bài học trước!')">
+                <div class="lesson-left">
+                  <div class="lesson-circle">03</div>
+                  <div>
+                    <div class="lesson-name">Day 3: DAY03</div>
+                    <div class="lesson-subtext">Prompt Engineering & Context Injection</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Day 4 -->
+              <div class="lesson-row" onclick="alert('Day 04 sẽ mở khóa sau khi bạn hoàn thành các bài học trước!')">
+                <div class="lesson-left">
+                  <div class="lesson-circle">04</div>
+                  <div>
+                    <div class="lesson-name">Day 4: DAY04</div>
+                    <div class="lesson-subtext">Fine-tuning vs RAG Pipeline</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Day 16: MINI HACKATHON -->
+              <div class="lesson-row" onclick="goToStep(2)">
+                <div class="lesson-left">
+                  <div class="lesson-circle">🏆</div>
+                  <div>
+                    <div class="lesson-name">Day 16: MINI HACKATHON</div>
+                    <div class="lesson-subtext">Batch 04 · Lớp 3B · Phòng E402 · Cụm B2 · Nhóm K4-3B-E402-AIGAN</div>
+                  </div>
+                </div>
+                <span class="lesson-badge badge-featured">TRACK D2 DEMO</span>
+              </div>
+
+              <!-- Day 5 -->
+              <div class="lesson-row">
+                <div class="lesson-left">
+                  <div class="lesson-circle">05</div>
+                  <div class="lesson-name">Day 5: Day05 · Advanced Retrieval</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- D2 TRACK INFO CARD (Canvas CP1 Alignment) -->
+            <div class="d2-callout">
+              <div class="d2-icon">D2</div>
+              <div class="d2-content" style="flex: 1;">
+                <div
+                  style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+                  <h4>Lát cắt Track D2 — Học từ lỗi trước</h4>
+                  <span class="institutional-badge">CANVAS CP1</span>
+                </div>
+                <p>
+                  <strong>Vấn đề thực tế:</strong> Khảo sát 60 học viên cho thấy <strong>67.7%</strong> người học khi
+                  làm sai chỉ xem đáp án chung rồi đoán/thử ra kết quả mà không tự giải thích được cách làm.
+                  <br>
+                  <strong>Giải pháp VLearn D2:</strong> Học viên trả lời bài tập trước khi xem lý thuyết ➔ AI đối chiếu
+                  rubric & tài liệu để quyết định <strong>đủ hay chưa đủ căn cứ</strong> đưa 1 gợi ý tối thiểu kèm nguồn
+                  ➔ Học viên tự sửa hiểu.
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <button class="d2-btn" onclick="goToStep(2)">
+                    Làm bài thử ngay (Vào Bước 2) →
+                  </button>
+                  <button class="btn-secondary" style="padding: 9px 16px; font-size: 11px;"
+                    onclick="switchMainView('diagram')">
+                    Xem Sơ đồ luồng (Flowchart) ◫
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: SIDEBAR -->
+          <div class="sidebar-col">
+
+            <!-- STUDY STREAK -->
+            <div class="sidebar-card black-card">
+              <div class="sidebar-title">
+                <span>STUDY STREAK</span>
+                <span class="institutional-badge" style="background: transparent; color: #fff; border-color: #fff;">0
+                  DAYS</span>
+              </div>
+              <div class="streak-body">
+                <span>Học hôm nay để kích hoạt chuỗi học tập</span>
+                <button class="streak-btn" onclick="goToStep(2)">
+                  Bắt đầu →
+                </button>
+              </div>
+            </div>
+
+            <!-- WHERE YOU'RE WEAKEST -->
+            <div class="sidebar-card">
+              <div class="sidebar-title">
+                <span>WHERE YOU'RE WEAKEST</span>
+                <span class="institutional-badge">D2 ADAPTIVE</span>
+              </div>
+              <div class="weakness-body">
+                <p style="margin-bottom: 8px; font-weight: 700; color: #000000;">Chưa có dữ liệu chẩn đoán.</p>
+                Làm bài tập chẩn đoán để VLearn đánh giá điểm nghẽn nhận thức của bạn.
+                <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #000000; font-size: 12px;">
+                  <strong>Cơ chế D2:</strong> AI không giải bài hộ mà xác định sự phân vân giữa RAG và Fine-tuning để
+                  đưa gợi ý gợi mở.
+                </div>
+                <button class="btn-secondary" style="width: 100%; margin-top: 12px; padding: 9px; font-size: 11px;"
+                  onclick="goToStep(2)">
+                  Làm bài chẩn đoán tư duy →
+                </button>
+              </div>
+            </div>
+
+            <!-- STUDY ACTIVITY -->
+            <div class="sidebar-card">
+              <div class="card-header-row" style="margin-bottom: 12px; border-bottom: 1px solid #000;">
+                <span class="card-title">STUDY ACTIVITY</span>
+                <a class="card-link" onclick="alert('Chưa có lịch sử học tập. Hãy bắt đầu bài tập Day 01!')">XEM TẤT CẢ
+                  ▶</a>
+              </div>
+              <div
+                style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 22px 10px; background: var(--bg-subtle); border: 1px solid var(--black); font-family: 'Cinzel', serif; letter-spacing: 0.08em;">
+                CHƯA CÓ HOẠT ĐỘNG NÀO ĐƯỢC GHI NHẬN
+              </div>
+            </div>
+
+            <!-- TEAM INFO -->
+            <div class="sidebar-card" style="font-size: 12px; color: var(--charcoal);">
+              <div class="academic-title" style="font-size: 11px; margin-bottom: 6px; font-weight: 800;">NHÓM
+                K4-3B-E402-AIGAN</div>
+              <div>PO / Luồng: <strong>Mai Văn Trường</strong></div>
+              <div>Evidence: <strong>Nguyễn Viết Đức</strong></div>
+              <div>UX / Prompt: <strong>Hồ Ngọc Mai</strong></div>
+              <div>Tech / Demo: <strong>Dương Văn Thành</strong></div>
+              <div style="margin-top: 8px; font-weight: 700; border-top: 1px solid #000; padding-top: 6px;">
+                Willing Users: Huy, Cường, Linh
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->

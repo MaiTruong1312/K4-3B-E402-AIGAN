@@ -1,0 +1,102 @@
+      <!-- SCREEN 4: RETRY (HỌC VIÊN TỰ SỬA HIỂU)         -->
+      <!-- ============================================== -->
+      <section class="screen-view" id="screen-4">
+        <div class="flow-page-header">
+          <div class="flow-breadcrumb">
+            <a onclick="goToStep(1)">Dashboard</a> <span>/</span>
+            <a onclick="goToStep(2)">Làm bài</a> <span>/</span>
+            <a onclick="goToStep(3)">Gợi ý</a> <span>/</span>
+            <span>Thử lại</span>
+          </div>
+          <span class="step-tag">BƯỚC IV / V · TỰ SỬA HIỂU</span>
+        </div>
+
+        <div class="flow-layout">
+          <div class="main-panel">
+            <h2 class="flow-title">Bây giờ, hãy thử diễn đạt lại bằng lời của bạn</h2>
+            <p class="flow-desc">Bạn không cần chép lại nguyên văn gợi ý của AI. Hãy viết lại theo cách mà bạn vừa tự
+              nhận ra trong đầu.</p>
+
+            <div class="support-policy compact" aria-label="Mức hỗ trợ hiện tại">
+              <div class="support-policy-header">
+                <strong>MỨC HỖ TRỢ HIỆN TẠI</strong>
+                <span class="attempt-indicator">Lần thử 1</span>
+              </div>
+              <div class="support-policy-steps">
+                <div class="support-policy-step" data-support-step="1"><b>Lần 1</b><span>Gợi ý tối thiểu</span></div>
+                <div class="support-policy-step" data-support-step="2"><b>Lần 2</b><span>Phản biện giả định</span></div>
+                <div class="support-policy-step" data-support-step="3"><b>Từ lần 3</b><span>Mở đáp án và căn cứ</span></div>
+              </div>
+            </div>
+
+            <div class="question-box">
+              <span class="meta-tag">GỢI Ý BẠN VỪA NHẬN ĐƯỢC:</span>
+              <p style="font-size: 13px; color: var(--charcoal); margin-top: 6px;" id="retry-hint-display"></p>
+            </div>
+
+            <div id="retry-choice-section" style="display: none;">
+              <label class="explain-label">Chọn lại phương án sau khi suy nghĩ:</label>
+              <div class="choice-group" id="retry-choice-container"></div>
+            </div>
+
+            <div class="revealed-answer-card" id="revealed-answer-card" style="display: none;">
+              <div class="revealed-answer-label">TẦNG HỖ TRỢ 3 · ĐÁP ÁN ĐÃ MỞ</div>
+              <div class="revealed-answer-title" id="revealed-answer-title"></div>
+              <p id="revealed-answer-description">Hãy chọn lại và giải thích vì sao đáp án này hợp lý bằng lời của bạn.</p>
+            </div>
+
+            <div class="explain-section">
+              <label class="explain-label" for="retry-explanation">
+                Cách bạn hiểu lại sau gợi ý:
+              </label>
+              <textarea class="explain-textarea" id="retry-explanation"
+                placeholder="Nhập câu trả lời đã được bạn tự sửa..."></textarea>
+            </div>
+
+            <!-- SUCCESS CONFIRMATION BOX (AFTER USER RETRIES) -->
+            <div id="retry-success-box" style="display: none; margin-bottom: 20px;">
+              <div class="result-status-banner status-correct">
+                <div class="result-icon">✓</div>
+                <div>
+                  <div class="result-badge">XÁC NHẬN: BẠN ĐÃ TỰ SỬA ĐÚNG!</div>
+                  <div class="result-title">Rất tốt! Khái niệm đã được bạn làm sáng tỏ bằng chính lời của mình.</div>
+                  <div class="result-desc">Điểm nghẽn nhận thức đã được tháo gỡ hoàn toàn. Bây giờ bạn có thể chuyển
+                    sang câu hỏi tiếp theo!</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-row" id="retry-action-row">
+              <button class="btn-primary" type="button" id="btn-verify-retry" onclick="submitRetry()">
+                Xác nhận & Kiểm tra lần sửa này →
+              </button>
+              <button class="btn-secondary" type="button" onclick="goToStep(3)">
+                Đọc lại gợi ý của AI
+              </button>
+            </div>
+
+            <!-- NEXT QUESTION BUTTON (APPEARS AFTER SUCCESS) -->
+            <div id="retry-next-container" style="display: none; margin-top: 14px;">
+              <button class="btn-primary" type="button" id="btn-next-q-from-retry" onclick="goToNextQuestion()">
+                Qua câu tiếp theo →
+              </button>
+            </div>
+
+          </div>
+
+          <!-- ASIDE CONTEXT -->
+          <div class="flow-aside">
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>🔄</span> Khoảnh khắc "Aha!"
+              </div>
+              <div class="spec-card-body">
+                Học viên tự sửa hiểu xong, hệ thống xác nhận <strong>ĐÃ ĐÚNG</strong> và lập tức mở nút <strong>"Qua câu
+                  tiếp theo →"</strong>.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->

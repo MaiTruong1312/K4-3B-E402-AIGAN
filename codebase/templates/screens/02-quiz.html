@@ -1,0 +1,114 @@
+      <!-- SCREEN 2: PRE-THEORY QUIZ (LÀM BÀI TRƯỚC LÝ THUYẾT) -->
+      <!-- ============================================== -->
+      <section class="screen-view" id="screen-2">
+        <div class="flow-page-header">
+          <div class="flow-breadcrumb">
+            <a onclick="goToStep(1)">Dashboard</a> <span>/</span>
+            <span>Day 1: Day01</span> <span>/</span>
+            <span id="quiz-breadcrumb-tag">Khái niệm RAG</span>
+          </div>
+          <span class="step-tag" id="quiz-step-tag">BƯỚC II / V · CÂU HỎI 1 / 2</span>
+        </div>
+
+        <div class="flow-layout">
+          <div class="main-panel">
+            <div
+              style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <h2 class="flow-title" id="quiz-main-title" style="margin-bottom: 0;">Kiểm tra cách hiểu của bạn trước khi
+                xem lý thuyết</h2>
+              <span class="institutional-badge filled" id="quiz-progress-badge">
+                Tiến độ: Câu 1 / 2
+              </span>
+            </div>
+            <p class="flow-desc">Bài luyện tập này <strong>không tính điểm số</strong>. Mục tiêu là giúp bạn bộc lộ cách
+              hiểu trực giác về khái niệm AI mới, từ đó AI có thể hỗ trợ bạn nhận diện điểm nghẽn và tự sửa cách hiểu.
+            </p>
+
+            <div class="question-browser">
+              <div class="question-mode-switch" aria-label="Chọn dạng câu hỏi">
+                <button class="question-mode-btn active" id="mode-all" type="button" onclick="filterQuestions('all')">Tất cả <span id="count-all">0</span></button>
+                <button class="question-mode-btn" id="mode-essay" type="button" onclick="filterQuestions('essay')">Tự luận <span id="count-essay">0</span></button>
+                <button class="question-mode-btn" id="mode-multiple_choice" type="button" onclick="filterQuestions('multiple_choice')">Trắc nghiệm <span id="count-mcq">0</span></button>
+              </div>
+              <div class="question-jump-list" id="question-jump-list" aria-label="Danh sách câu hỏi"></div>
+            </div>
+
+            <div class="support-policy" aria-label="Quy tắc tăng mức hỗ trợ">
+              <div class="support-policy-header">
+                <strong>THANG HỖ TRỢ KHI TRẢ LỜI SAI</strong>
+                <span class="attempt-indicator">Chưa bắt đầu</span>
+              </div>
+              <div class="support-policy-steps">
+                <div class="support-policy-step" data-support-step="1"><b>Lần 1</b><span>Gợi ý tối thiểu</span></div>
+                <div class="support-policy-step" data-support-step="2"><b>Lần 2</b><span>Phản biện giả định</span></div>
+                <div class="support-policy-step" data-support-step="3"><b>Từ lần 3</b><span>Mở đáp án và căn cứ</span></div>
+              </div>
+              <p>Đáp án không bị giấu vô hạn. Khi đã thử hai lần, bạn được xem đáp án nhưng vẫn cần tự giải thích lại để chứng minh mình hiểu.</p>
+            </div>
+
+            <div class="question-box">
+              <div class="question-meta">
+                <span class="meta-tag" id="question-concept-tag">Khái niệm: Retrieval-Augmented Generation (RAG)</span>
+                <span class="no-score-badge">Không tính điểm</span>
+              </div>
+              <div class="explain-label">Câu hỏi từ bài học:</div>
+              <div class="question-text" id="lesson-question-text">Đang tải câu hỏi...</div>
+            </div>
+
+            <div id="multiple-choice-section" style="display: none;">
+              <label class="explain-label">Chọn phương án phù hợp nhất:</label>
+              <div class="choice-group" id="dynamic-choice-container"></div>
+            </div>
+
+            <!-- Written explanation -->
+            <div class="explain-section">
+              <label class="explain-label" for="user-explanation">
+                Cách hiểu hoặc câu trả lời hiện tại của bạn:
+              </label>
+              <div class="explain-sub">
+                Phần giải thích giúp AI hiểu rõ bạn đang suy luận thế nào (thay vì đoán mò đáp án).
+              </div>
+              <textarea class="explain-textarea" id="user-explanation" placeholder="Viết điều bạn đang nghĩ, kể cả khi chưa chắc đúng..."></textarea>
+            </div>
+
+            <div class="btn-row">
+              <button class="btn-primary" id="btn-submit-answer" type="button" onclick="submitStep2()">
+                Gửi để AI phân tích cách hiểu →
+              </button>
+              <button class="btn-secondary" type="button" onclick="goToStep(1)">
+                Quay lại Dashboard
+              </button>
+            </div>
+          </div>
+
+          <!-- ASIDE CONTEXT -->
+          <div class="flow-aside">
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>⚖️</span> Cơ chế kiểm tra Đúng / Sai D2
+              </div>
+              <div class="spec-card-body">
+                Hệ thống kiểm tra ngay bạn <strong>Đúng</strong> hay <strong>Chưa đúng</strong>:
+                <br><br>
+                • <strong>Nếu Đúng:</strong> AI xác nhận và cho phép bấm <strong>"Qua câu tiếp theo →"</strong> ngay.
+                <br>• <strong>Nếu Chưa đúng:</strong> Hệ thống <strong>không cho sẵn đáp án</strong> mà đưa gợi ý tối
+                thiểu để bạn tự sửa lại.
+              </div>
+            </div>
+
+            <div class="spec-card">
+              <div class="spec-card-title">
+                <span>📋</span> Quyết định AI có điều kiện
+              </div>
+              <div class="spec-card-body">
+                AI đối chiếu câu trả lời với rubric và bài giảng:
+                <br><br>
+                • <strong>Đủ căn cứ:</strong> Đưa 1 gợi ý tối thiểu + nguồn kiểm chứng.
+                <br>• <strong>Chưa đủ căn cứ:</strong> Nêu rõ chưa đủ căn cứ và hỏi lại làm rõ, không phán xét võ đoán.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->

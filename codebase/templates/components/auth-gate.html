@@ -1,0 +1,23 @@
+  <div class="auth-gate" id="auth-gate">
+    <div class="auth-card">
+      <div class="eyebrow">VLEARN · NHẬN DIỆN NGƯỜI DÙNG</div>
+      <h1>Vào không gian học tập</h1>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="auth-tab-student" type="button" onclick="switchAuthRole('student')">Học viên</button>
+        <button class="auth-tab" id="auth-tab-teacher" type="button" onclick="switchAuthRole('teacher')">Giảng viên</button>
+      </div>
+      <form id="student-login-form" onsubmit="loginStudent(event)">
+        <label for="student-code">Mã sinh viên</label>
+        <input id="student-code" name="student-code" autocomplete="username" maxlength="40" required placeholder="Nhập mã sinh viên">
+        <button class="btn-primary" type="submit">Bắt đầu học →</button>
+      </form>
+      <form id="teacher-login-form" style="display:none" onsubmit="loginTeacher(event)">
+        <label for="teacher-username">Tài khoản giảng viên</label>
+        <input id="teacher-username" autocomplete="username" required>
+        <label for="teacher-password">Mật khẩu</label>
+        <input id="teacher-password" type="password" autocomplete="current-password" required>
+        <button class="btn-primary" type="submit">Mở báo cáo lớp →</button>
+      </form>
+      <p class="auth-error" id="auth-error" role="alert"></p>
+    </div>
+  </div>

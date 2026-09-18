@@ -1,0 +1,191 @@
+    <!-- ============================================================== -->
+    <!-- VIEW 2: FULL FLOWCHART DIAGRAM (SƠ ĐỒ LUỒNG HOẠT ĐỘNG CP2)      -->
+    <!-- ============================================================== -->
+    <div id="diagram-view" style="display: none;">
+      <div class="flowchart-container">
+        <div class="flowchart-header">
+          <span class="institutional-badge filled" style="display: inline-block; margin-bottom: 10px;">KIẾN TRÚC HỆ
+            THỐNG · SƠ ĐỒ LUỒNG CP2</span>
+          <h2>Luồng Hoạt Động Tổng Thể (End-to-End User Flow)</h2>
+          <p>Thể hiện chi tiết: Người dùng bấm gì trước, biết Đúng/Sai ở đâu, AI đưa gợi ý tối thiểu ra sao, và chuyển
+            qua câu tiếp theo như thế nào.</p>
+        </div>
+
+        <div class="flow-steps-diagram">
+
+          <!-- STEP 1 -->
+          <div class="f-node">
+            <div class="f-node-top">
+              <span class="f-role">I. NGƯỜI DÙNG</span>
+              <span class="institutional-badge">Dashboard VLearn</span>
+            </div>
+            <div class="f-action-title">Học viên bấm vào bài học khái niệm mới (Day 1: Khái niệm RAG)</div>
+            <div class="f-action-desc">
+              <strong>Hành động:</strong> Học viên nhìn thấy thẻ bài học và thông báo "Làm bài trước lý thuyết - Không
+              tính điểm số". Học viên click nút <em>"Open the course (Làm bài trước lý thuyết)"</em>.
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>chuyển sang màn hình làm bài</span>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="f-node">
+            <div class="f-node-top">
+              <span class="f-role">II. NGƯỜI DÙNG</span>
+              <span class="institutional-badge">Màn hình Bài tập Thử thách</span>
+            </div>
+            <div class="f-action-title">Chọn đáp án trắc nghiệm + Gõ giải thích ngắn suy nghĩ cá nhân</div>
+            <div class="f-action-desc">
+              <strong>Hành động:</strong> Học viên chọn phương án mình tin là đúng và nhập 1-2 câu giải thích vì sao
+              mình nghĩ như vậy. Sau đó bấm <em>"Gửi câu trả lời để kiểm tra Đúng / Sai"</em>.
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>hệ thống đối chiếu và xác định kết quả</span>
+          </div>
+
+          <!-- STEP 3: DECISION NODE (ĐÚNG HAY SAI) -->
+          <div class="f-node" style="background: var(--bg-subtle);">
+            <div class="f-node-top">
+              <span class="f-role">III. HỆ THỐNG KIỂM TRA ĐÚNG / SAI & AI PHẢN HỒI</span>
+              <span class="institutional-badge filled">Thông báo kết quả tức thì</span>
+            </div>
+            <div class="f-action-title">Biết được Đúng hay Chưa đúng ngay sau khi trả lời</div>
+            <div class="f-action-desc">
+              • <strong>Nếu ĐÚNG:</strong> Hiện banner xác nhận CHÍNH XÁC, AI củng cố kiến thức và xuất hiện nút
+              <strong>"Qua câu tiếp theo →"</strong>.
+              <br>• <strong>Nếu SAI (Track D2):</strong> Hiện banner CHƯA ĐÚNG. Hệ thống không cho đáp án mà đưa
+              <strong>Gợi ý tối thiểu (Minimal Hint) + Nguồn</strong> để học viên tự sửa.
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>phân nhánh theo kết quả</span>
+          </div>
+
+          <!-- STEP 4: BRANCHING -->
+          <div class="f-branch-wrap">
+            <!-- BRANCH A: CORRECT DIRECT -->
+            <div class="f-branch-card">
+              <div class="f-branch-tag">NHÁNH 1: TRẢ LỜI ĐÚNG NGAY</div>
+              <div style="font-weight: 700; color: #000; margin-bottom: 6px; font-size: 15px;">Xác nhận chính xác &
+                Chuyển tiếp</div>
+              <div style="font-size: 13px; color: var(--charcoal); line-height: 1.55;">
+                • <strong>Thấy gì:</strong> Banner báo đúng + lời giải thích củng cố.
+                <br>• <strong>Nút bấm:</strong> Học viên bấm <em>"Qua câu tiếp theo →"</em> để sang câu kế tiếp ngay lập
+                tức.
+              </div>
+            </div>
+
+            <!-- BRANCH B: WRONG & D2 SELF-CORRECTION -->
+            <div class="f-branch-card">
+              <div class="f-branch-tag">NHÁNH 2: TRẢ LỜI SAI (CƠ CHẾ D2)</div>
+              <div style="font-weight: 700; color: #000; margin-bottom: 6px; font-size: 15px;">Gợi ý tối thiểu ➔ Học
+                viên Tự sửa hiểu</div>
+              <div style="font-size: 13px; color: var(--charcoal); line-height: 1.55;">
+                • <strong>Thấy gì:</strong> Báo sai + Nhận diện ngộ nhận + Gợi ý tối thiểu.
+                <br>• <strong>Hành động:</strong> Học viên tự sửa lại cách hiểu đúng.
+                <br>• <strong>Kết quả:</strong> Khi sửa đúng ➔ Hiện nút <em>"Qua câu tiếp theo →"</em>.
+              </div>
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>sau khi hoàn thành hoặc sửa đúng câu hỏi</span>
+          </div>
+
+          <!-- STEP 5: NEXT QUESTION / PROGRESSION -->
+          <div class="f-node">
+            <div class="f-node-top">
+              <span class="f-role">IV. QUA CÂU TIẾP THEO</span>
+              <span class="institutional-badge">Tiến độ bài luyện tập</span>
+            </div>
+            <div class="f-action-title">Chuyển sang câu hỏi kế tiếp (Câu 2/2: Chunking & Context Window)</div>
+            <div class="f-action-desc">
+              <strong>Hành động:</strong> Học viên bấm nút <em>"Qua câu tiếp theo →"</em>, màn hình nạp câu hỏi mới. Học
+              viên tiếp tục thử sức và nhận phản hồi tương tự cho đến khi hoàn thành toàn bộ bài tập.
+            </div>
+          </div>
+
+          <div class="f-arrow">
+            ↓ <span>hoàn tất toàn bộ chuỗi câu hỏi</span>
+          </div>
+
+          <!-- STEP 6: DONE -->
+          <div class="f-node" style="background: var(--bg-subtle);">
+            <div class="f-node-top">
+              <span class="f-role">V. HOÀN THÀNH TOÀN BỘ</span>
+              <span class="institutional-badge filled">Màn hình Đích & Mở khóa</span>
+            </div>
+            <div class="f-action-title">Hiển thị So sánh Trước - Sau & Mở khóa Bài giảng Lý thuyết Chi tiết</div>
+            <div class="f-action-desc">
+              <strong>Kết thúc ở đâu:</strong>
+              <br>• Học viên thấy bảng so sánh tư duy (Trước khi gợi ý vs Sau khi tự sửa cho cả 2 câu hỏi).
+              <br>• Hệ thống cập nhật Study Streak (+1 ngày).
+              <br>• Mở khóa bài học lý thuyết sâu: <em>"Kiến trúc RAG Pipeline thực tế"</em>.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SUMMARY TABLE -->
+        <table class="flow-summary-table">
+          <thead>
+            <tr>
+              <th>Bước</th>
+              <th>Người dùng bấm gì?</th>
+              <th>Người dùng thấy gì?</th>
+              <th>Hệ thống / AI làm gì?</th>
+              <th>Đầu ra kết quả</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>I. Entry Point</strong></td>
+              <td>Bấm nút <em>"Open the course (Làm bài trước lý thuyết)"</em></td>
+              <td>Thẻ bài tập Day 01 kèm tag "Làm bài trước lý thuyết"</td>
+              <td>Tải câu hỏi kiểm tra khái niệm RAG</td>
+              <td>Vào giao diện làm bài</td>
+            </tr>
+            <tr>
+              <td><strong>II. Làm bài & Biết Đúng/Sai</strong></td>
+              <td>Chọn đáp án A/B/C, gõ giải thích và bấm <em>"Gửi câu trả lời"</em></td>
+              <td>Form làm bài câu hỏi 1/2 với các nút nạp nhanh mẫu</td>
+              <td>Chấm kết quả ngay lập tức: <strong>ĐÚNG hay SAI</strong></td>
+              <td>Hiển thị banner kết quả rõ ràng</td>
+            </tr>
+            <tr>
+              <td><strong>III. AI Gợi ý & Xử lý</strong></td>
+              <td>Đọc kết quả và phản hồi từ trợ lý VLearn</td>
+              <td>Nếu đúng: banner xác nhận. Nếu sai: banner chỉ ra ngộ nhận và gợi ý tối thiểu</td>
+              <td>Chỉ đưa gợi ý nhỏ kèm nguồn, không cho xem đáp án sẵn</td>
+              <td>Giữ an toàn kiến thức (HAX)</td>
+            </tr>
+            <tr>
+              <td><strong>IV. Tự sửa & Qua câu tiếp</strong></td>
+              <td>Gõ câu sửa hiểu, bấm <em>"Xác nhận"</em>, rồi bấm <em>"Qua câu tiếp theo →"</em></td>
+              <td>Thông báo sửa đúng xuất hiện, kèm nút bấm qua câu tiếp theo</td>
+              <td>Xác nhận học viên đã hiểu đúng và nạp câu hỏi 2/2</td>
+              <td>Chuyển sang câu hỏi kế tiếp</td>
+            </tr>
+            <tr>
+              <td><strong>V. Kết thúc bộ bài</strong></td>
+              <td>Bấm <em>"Hoàn thành & Xem tổng kết"</em></td>
+              <td>Bảng so sánh Trước-Sau, Mở khóa bài lý thuyết, Cập nhật Streak</td>
+              <td>Ghi nhận hoàn thành bộ câu hỏi vào hồ sơ VLearn</td>
+              <td>Hoàn tất trọn vẹn chu trình D2</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div style="text-align: center; margin-top: 36px;">
+          <button class="btn-primary" onclick="switchMainView('interactive')">
+            ← Quay lại Chế độ Trải nghiệm Mockup bấm được
+          </button>
+        </div>
+      </div>
+    </div>
+
