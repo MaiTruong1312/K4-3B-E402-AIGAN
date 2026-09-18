@@ -1,8 +1,8 @@
 # AI SPEC — Học từ lỗi trước · K4-3B-E402-AIGAN
 
 **Lớp:** 3B · **Phòng:** E402 · **Cụm:** B2 · **Track:** D2 — Học tập thích ứng và tương tác.
-**Loại:** Tính năng mới trên VLearn · **Prototype hiện tại:** Mock.
-**Mốc chốt spec theo README:** 21:00 ngày 17/09/2026 tại CP4. Quality bar ở §7 là tiêu chí đề xuất cho lần nộp này; chưa có bằng chứng đã nộp/chốt hoặc chạy eval.
+**Loại:** Tính năng mới trên VLearn · **Prototype hiện tại:** Working slice cho 3 workflow chính.
+**Mốc chốt spec theo README:** 21:00 ngày 17/09/2026 tại CP4. Quality bar ở §7 là tiêu chí chốt trước khi xem kết quả và không hạ sau khi chạy eval; kết quả CP3/CP4 hiện được ghi ở [eval/cp3-test-results.md](eval/cp3-test-results.md).
 ## §1. User & Job
 
 - **Track + đề:** D — Học tập thích ứng và tương tác · D2 — Học từ lỗi trước: làm bài rồi mới được giảng.
@@ -71,7 +71,7 @@ Không coi việc có gợi ý là bằng chứng cải thiện học tập; ph�
 
 **Lát cắt MỘT CÂU:** Học viên vừa trả lời một bài về khái niệm AI/LLM trước khi xem lý thuyết, cần tự sửa cách hiểu · AI quyết định **đủ / chưa đủ căn cứ để đưa gợi ý** dựa trên câu trả lời, rubric và tài liệu · kết quả là một phản hồi giúp học viên thử lại: gợi ý tối thiểu kèm nguồn khi đủ căn cứ hoặc yêu cầu làm rõ khi chưa đủ.
 
-**Artifact thiết kế:** [Mock HTML bấm được](codebase/cp2-flow.html) và [báo cáo luồng CP2](codebase/cp2-luong-hoat-dong.md). Sơ đồ tại §6 bổ sung đầy đủ các nhánh ngoại lệ vào hành trình hiện có. Mỗi lượt xử lý một câu; bộ demo có hai câu về RAG và Context Window/Chunking.
+**Artifact thiết kế:** [HTML bấm được](codebase/cp2-flow.html), backend FastAPI trong `codebase/app.py`, logic đánh giá trong `codebase/ai_service.py` và [báo cáo luồng CP2](codebase/cp2-luong-hoat-dong.md). Sơ đồ tại §6 bổ sung đầy đủ các nhánh ngoại lệ vào hành trình hiện có. Mỗi lượt xử lý một câu; bộ demo có hai câu về RAG và Context Window/Chunking.
 
 **Non-goals:**
 
@@ -79,30 +79,30 @@ Không coi việc có gợi ý là bằng chứng cải thiện học tập; ph�
 - Không chấm điểm chính thức hoặc kết luận năng lực tổng thể của học viên.
 - Không giải bài hộ, trả ngay toàn bộ đáp án khi học viên cần tự sửa.
 - Không hỗ trợ kiến thức ngoài bài và nguồn đã được duyệt.
-- Không tích hợp tài khoản, hồ sơ học tập, mở khóa khóa học hay Study Streak thật trong bản Mock.
+- Không tích hợp tài khoản, hồ sơ học tập, mở khóa khóa học hay Study Streak thật trong working slice hiện tại.
 
-**Mức prototype nhắm tới cho thiết kế này:** [ ] Sketch · [x] Mock · [ ] Working. Bản HTML chạy tương tác phía trình duyệt, nhưng chưa có model call, truy xuất tài liệu hoặc backend; không coi các banner kết quả là bằng chứng AI đã đánh giá đúng.
+**Mức prototype hiện tại:** [ ] Sketch · [ ] Mock · [x] Working slice. Bản hiện tại chạy end-to-end qua FastAPI, gọi LLM thật ở `/api/analyze`, dùng `codebase/content/lesson.json` làm nguồn/rubric đã chắt lọc và lưu session/attempt vào SQLite local. Phạm vi working mới phủ ba workflow chính: đúng thì `VERIFY`, sai khái niệm thì `DIAGNOSE`, mơ hồ/gian lận/lạc đề thì `CLARIFY` hoặc `DECLINE`. Hai đường đi thiết kế đích vẫn chưa triển khai đủ là failure/no-grounding injection và correction workflow cho người dùng sửa nhận định AI.
 
 | Thành phần | Chạy thật / giả lập trong codebase hiện tại |
 |---|---|
-| Điều hướng và nhập liệu | JavaScript chạy thật: chuyển `screen-1` đến `screen-5`, chọn A/B/C, nhập giải thích, thử lại và chuyển câu bằng `goToStep()`, `submitStep2()`, `submitRetry()`, `goToNextQuestion()`. |
-| Nội dung và phản hồi AI | Giả lập bằng `questionsData`: câu hỏi, đáp án, mô tả lỗi, gợi ý và tên nguồn đều viết sẵn. Không có gọi AI hoặc tìm kiếm nguồn thật. |
-| Đủ/chưa đủ căn cứ | `submitStep2()` đưa vào nhánh mơ hồ khi giải thích dưới 15 ký tự hoặc chứa “khó quá”/“chọn bừa”; các trường hợp còn lại phân loại theo đáp án đã chọn. Đây là quy tắc demo, không phải độ tin cậy của model. |
-| Kiểm tra lần sửa | `submitRetry()` luôn hiện thành công, kể cả khi ô nhập trống; chỉ cập nhật phần “sau” của tổng kết khi có nội dung. Chưa kiểm tra đúng/sai theo rubric. |
-| Nguồn và tổng kết | Tên nguồn, phần “trước”, mở khóa lý thuyết và streak là nội dung mẫu; liên kết nguồn chỉ minh họa. Chưa lưu lịch sử vào hồ sơ VLearn. |
-| Nhánh bổ sung | Thiếu nguồn, lỗi dịch vụ, chuyển TA và sửa trực tiếp nhận định AI được thiết kế ở §6; chưa có điều khiển tương ứng trong HTML. |
+| Điều hướng và nhập liệu | JavaScript chạy thật: mở dashboard, nhận lesson từ `/api/lesson`, chọn/nhập giải thích, gửi `/api/analyze`, thử lại và chuyển câu. |
+| Nội dung và phản hồi AI | Câu hỏi và nguồn lấy từ `lesson.json`; backend gọi LLM thật với rubric theo câu hỏi, source IDs được whitelist và response được validate trước khi trả UI. |
+| Đủ/chưa đủ căn cứ | Backend phân biệt `VERIFY`, `DIAGNOSE`, `CLARIFY`, `DECLINE`; có rule cục bộ cho các mẫu rõ như “chọn bừa”, “bịa nguồn”, “chép đáp án”, hoặc lựa chọn A/B/C mâu thuẫn với giải thích. |
+| Kiểm tra lần sửa | Retry được lưu qua `/api/attempt`; các case retry trong golden set đi qua cùng logic đánh giá khi gọi lại `/api/analyze`. UI chưa có đầy đủ correction workflow để sửa nhận định AI. |
+| Nguồn và tổng kết | Nguồn citation lấy từ `lesson.json` (`T03-036`, `T03-119`, `T06-139`, `T04-051`, `T04-053`). Tổng kết và trạng thái học vẫn là demo, chưa ghi vào hồ sơ VLearn thật. |
+| Nhánh bổ sung | Guardrail ngoài phạm vi đã có ở backend. Thiếu nguồn, rubric mâu thuẫn, mô phỏng timeout/schema lỗi, clarification count và correction workflow mới có trong spec/golden set, chưa có test hook/UI đầy đủ. |
 
 **Automation:** [ ] Augment · [x] Conditional · [ ] Automate.
 
-**Lý do theo cost-of-error:** Nếu AI gán sai ngộ nhận hoặc báo đúng khi học viên vẫn hiểu sai, học viên chịu thiệt hại do củng cố kiến thức sai và mang lỗi sang bài sau; học viên mới khó tự phát hiện, còn TA phải đọc lại bài và giải thích lại để sửa. Ngược lại, hỏi thêm một câu khi chưa chắc chỉ khiến học viên thêm một lượt nhập. Vì vậy, hệ thống chỉ tự phản hồi khi câu trả lời rõ, rubric và đoạn nguồn phù hợp, không mâu thuẫn; trường hợp thiếu căn cứ hoặc vẫn mơ hồ sau một lượt làm rõ phải dừng kết luận và để học viên chuyển nội dung cho TA. Không dùng mức Automate vì lỗi kiến thức không dễ tự thấy và tự sửa; không bắt TA duyệt từng phản hồi có căn cứ trong bài luyện tập không tính điểm. Giả định case rõ là phần lớn cần được kiểm chứng qua golden set, chưa có số liệu từ Mock.
+**Lý do theo cost-of-error:** Nếu AI gán sai ngộ nhận hoặc báo đúng khi học viên vẫn hiểu sai, học viên chịu thiệt hại do củng cố kiến thức sai và mang lỗi sang bài sau; học viên mới khó tự phát hiện, còn TA phải đọc lại bài và giải thích lại để sửa. Ngược lại, hỏi thêm một câu khi chưa chắc chỉ khiến học viên thêm một lượt nhập. Vì vậy, hệ thống chỉ tự phản hồi khi câu trả lời rõ, rubric và đoạn nguồn phù hợp, không mâu thuẫn; trường hợp thiếu căn cứ hoặc vẫn mơ hồ sau một lượt làm rõ phải dừng kết luận và để học viên chuyển nội dung cho TA. Không dùng mức Automate vì lỗi kiến thức không dễ tự thấy và tự sửa; không bắt TA duyệt từng phản hồi có căn cứ trong bài luyện tập không tính điểm. Kết quả hiện tại cho thấy 16/16 case runnable đạt, nhưng 6/22 case failure/correction chưa có cơ chế chạy nên chưa được coi là đạt full quality bar.
 
-**Điểm quyết định khi triển khai Working:** Sau khi gửi câu trả lời, kiểm tra phạm vi, rubric và khả năng truy xuất nguồn trước khi gọi AI. AI nhận câu hỏi, đáp án đã chọn, giải thích, rubric và đoạn nguồn để quyết định có đủ căn cứ phản hồi; hệ thống chỉ hiển thị kết luận khi căn cứ hợp lệ. Thiếu nguồn không được biến thành “học viên làm sai”. Đánh giá lại cũng đi qua cùng cổng kiểm tra, không tự động báo thành công như Mock hiện tại.
+**Điểm quyết định đã triển khai trong working slice:** Sau khi gửi câu trả lời, backend kiểm tra session, input, rubric và source IDs trước khi gọi AI. AI nhận câu hỏi, đáp án đã chọn, giải thích, rubric và đoạn nguồn để quyết định `VERIFY`/`DIAGNOSE`/`CLARIFY`/`DECLINE`; hệ thống chỉ chấp nhận source IDs nằm trong `lesson.json`. Thiếu nguồn không được biến thành “học viên làm sai”, nhưng hiện chưa có test hook để ép trạng thái thiếu nguồn/rubric mâu thuẫn trong UI/API public.
 
 ### §4b. Nguyên tắc HAX và vị trí áp dụng
 
 | Nguyên tắc | Áp cụ thể vào đâu trong prototype | Hiện trạng / cách kiểm tra |
 |---|---|---|
-| [G1 — Nêu rõ hệ thống làm được gì](https://www.microsoft.com/en-us/haxtoolkit/guideline/make-clear-what-the-system-can-do/) | `screen-2`: mô tả bài luyện tập không tính điểm, ô giải thích và khối “Quyết định AI có điều kiện” nêu đủ căn cứ thì gợi ý, chưa đủ thì hỏi lại. | Đã có nội dung trong Mock; đọc trước khi gửi bài để biết phạm vi hỗ trợ. |
+| [G1 — Nêu rõ hệ thống làm được gì](https://www.microsoft.com/en-us/haxtoolkit/guideline/make-clear-what-the-system-can-do/) | `screen-2`: mô tả bài luyện tập không tính điểm, ô giải thích và khối “Quyết định AI có điều kiện” nêu đủ căn cứ thì gợi ý, chưa đủ thì hỏi lại. | Đã có nội dung trong UI working slice; đọc trước khi gửi bài để biết phạm vi hỗ trợ. |
 | [G10 — Thu hẹp phạm vi khi nghi ngờ](https://www.microsoft.com/en-us/haxtoolkit/guideline/scope-services-when-in-doubt/) **(bắt buộc)** | `screen-3` / `ai-result-insufficient`: không kết luận ngộ nhận, yêu cầu bổ sung giải thích; §6 thêm nhánh dừng khi thiếu nguồn và chuyển TA khi vẫn mơ hồ. | Nhập “khó quá” để xem nhánh hiện có. `clarify-text` hiện tái dùng gợi ý tĩnh; câu hỏi làm rõ riêng và chuyển TA mới được đặc tả ở §6. |
 | [G11 — Giải thích vì sao có phản hồi](https://www.microsoft.com/en-us/haxtoolkit/guideline/make-clear-why-the-system-did-what-it-did/) | `screen-3`: `wrong-user-summary`, `minimal-hint-text`, `hint-source-text` giải thích lỗi được nhận diện và căn cứ; nhánh mơ hồ giải thích vì sao chưa kết luận. | Đã hiển thị giải thích/nhãn nguồn mẫu. Khi Working phải dẫn tới đúng đoạn nguồn; hiện chưa có truy xuất hoặc liên kết nguồn kiểm chứng được. |
 | [G9 — Cho phép sửa dễ dàng](https://www.microsoft.com/en-us/haxtoolkit/guideline/support-efficient-correction/) | Tại thẻ phản hồi `screen-3`, thiết kế nút “AI hiểu sai ý tôi” mở bản tóm tắt nhận định có thể sửa trực tiếp; học viên sửa và bấm “Đánh giá lại” như nhánh COR trong §6. | Chưa có trong HTML. Ô `retry-explanation` ở `screen-4` hiện chỉ cho sửa câu trả lời của học viên, chưa phải cơ chế sửa kết quả AI; cần bổ sung đúng điều khiển này để kiểm tra G9 trên bản bấm được. |
@@ -129,7 +129,7 @@ Không coi việc có gợi ý là bằng chứng cải thiện học tập; ph�
 
 ### Hành trình tổng thể
 
-Sơ đồ dưới đây là **thiết kế đích**, dựa trên năm màn hình trong codebase và bổ sung các nhánh còn thiếu. Điểm CALL là nơi sẽ gọi AI ở bản Working; hiện được giả lập bởi `submitStep2()`. Các nhánh thiếu nguồn, chuyển TA và sửa nhận định AI mới có trong sơ đồ/spec.
+Sơ đồ dưới đây là **thiết kế đích**. Working slice hiện tại đã triển khai điểm CALL qua `/api/analyze` cho ba workflow chính: happy path, low-confidence/clarify và guardrail ngoài phạm vi/gian lận. Các nhánh thiếu nguồn có chủ đích, rubric mâu thuẫn, chuyển TA và sửa nhận định AI vẫn mới có trong sơ đồ/spec hoặc golden set, chưa có UI/test hook đầy đủ.
 
 ```mermaid
 flowchart TD
@@ -166,22 +166,22 @@ flowchart TD
 
 | Đường đi | Điều kiện vào | Người dùng thấy / làm | Đầu ra và điểm kết thúc | Đối chiếu codebase |
 |---|---|---|---|---|
-| **Happy path — đủ căn cứ** | Giải thích rõ, có rubric và nguồn hỗ trợ; nhận định không mâu thuẫn với bài làm. | Từ Dashboard vào bài, chọn đáp án và nhập giải thích. Nếu đúng và giải thích phù hợp: xem phản hồi củng cố; nếu có lỗi: nhận một gợi ý kèm nguồn → “Tôi đã nhận ra! Thử sửa lại” → nhập cách hiểu mới → kiểm tra lại. | Chỉ xác nhận đúng khi bài sửa đáp ứng rubric; nếu chưa đúng, tiếp tục gợi ý hoặc hỏi lại. Qua câu 2, rồi tổng kết trước/sau và sang lý thuyết. | `screen-1` → `screen-2` → `ai-result-correct` hoặc `ai-result-sufficient` → `screen-4` → `screen-5`. Phản hồi và xác nhận đúng hiện là mô phỏng. |
-| **Low-confidence — lớp ②** | Có nguồn nhưng giải thích ngắn, mơ hồ, đoán đáp án hoặc không rõ suy luận. | Hiện “Chưa đủ căn cứ để xác định bạn đang vướng ở đâu”, hỏi một điểm cụ thể; nút “Quay lại bổ sung thêm giải thích” giữ bài để sửa. Sau một lượt làm rõ vẫn mơ hồ, cho chọn nhờ TA hoặc tạm dừng. | Gửi lại qua điểm quyết định; không gán ngộ nhận, không xác nhận hiểu đúng khi chưa đủ căn cứ. | `ai-result-insufficient` có sẵn; thử bằng “Em thấy khó quá, chọn bừa”. Giới hạn một lượt làm rõ và chuyển TA là thiết kế bổ sung. |
-| **Failure / no-grounding — lớp ①** | Không tìm được đoạn nguồn phù hợp, rubric thiếu/mâu thuẫn; hoặc gọi dịch vụ thất bại. | Với thiếu nguồn: “Chưa tìm thấy căn cứ phù hợp cho bài này”; với lỗi dịch vụ: “Chưa kiểm tra được, bài làm của bạn được giữ lại”. Có “Thử lại” và “Nhờ TA”; không tạo citation hoặc suy đoán đáp án. | Thử lại từ kiểm tra nguồn; nếu không khôi phục được thì tạm dừng đánh giá. Khi học viên chọn nhờ TA, chuẩn bị câu hỏi, bài làm và lý do dừng để họ tự chuyển; không tự gửi. | Chưa có nhánh tương ứng trong HTML; nguồn hiện là chuỗi tĩnh. Đây là trạng thái FAIL/ERROR trong sơ đồ, khác với thiếu thông tin từ người học. |
+| **Happy path — đủ căn cứ** | Giải thích rõ, có rubric và nguồn hỗ trợ; nhận định không mâu thuẫn với bài làm. | Từ Dashboard vào bài, chọn đáp án và nhập giải thích. Nếu đúng và giải thích phù hợp: xem phản hồi củng cố; nếu có lỗi: nhận một gợi ý kèm nguồn → “Tôi đã nhận ra! Thử sửa lại” → nhập cách hiểu mới → kiểm tra lại. | Chỉ xác nhận đúng khi bài sửa đáp ứng rubric; nếu chưa đúng, tiếp tục gợi ý hoặc hỏi lại. Qua câu 2, rồi tổng kết trước/sau và sang lý thuyết. | Đã có backend thật cho `VERIFY`/`DIAGNOSE`; GS01-GS06, GS18, GS21 đạt trong lượt chạy 18/09/2026. |
+| **Low-confidence — lớp ②** | Có nguồn nhưng giải thích ngắn, mơ hồ, đoán đáp án hoặc không rõ suy luận. | Hiện “Chưa đủ căn cứ để xác định bạn đang vướng ở đâu”, hỏi một điểm cụ thể; nút “Quay lại bổ sung thêm giải thích” giữ bài để sửa. Sau một lượt làm rõ vẫn mơ hồ, cho chọn nhờ TA hoặc tạm dừng. | Gửi lại qua điểm quyết định; không gán ngộ nhận, không xác nhận hiểu đúng khi chưa đủ căn cứ. | `CLARIFY` đã chạy thật cho input mơ hồ và lựa chọn/giải thích mâu thuẫn; GS12, GS13, GS19 đạt. Giới hạn `clarification_count=1` và chuyển TA vẫn chưa có cơ chế chạy; GS14 chưa chạy được. |
+| **Failure / no-grounding — lớp ①** | Không tìm được đoạn nguồn phù hợp, rubric thiếu/mâu thuẫn; hoặc gọi dịch vụ thất bại. | Với thiếu nguồn: “Chưa tìm thấy căn cứ phù hợp cho bài này”; với lỗi dịch vụ: “Chưa kiểm tra được, bài làm của bạn được giữ lại”. Có “Thử lại” và “Nhờ TA”; không tạo citation hoặc suy đoán đáp án. | Thử lại từ kiểm tra nguồn; nếu không khôi phục được thì tạm dừng đánh giá. Khi học viên chọn nhờ TA, chuẩn bị câu hỏi, bài làm và lý do dừng để họ tự chuyển; không tự gửi. | Chưa có test hook/API public để ép nguồn rỗng, rubric mâu thuẫn, tên nguồn không nội dung hoặc timeout/schema lỗi; GS07-GS10 chưa chạy được. |
 | **Correction — người dùng sửa kết quả AI** | AI tóm tắt sai ý hoặc gán sai ngộ nhận, dù người dùng đã giải thích rõ. | Tại thẻ phản hồi, bấm “AI hiểu sai ý tôi” → sửa trực tiếp đoạn nhận định → “Đánh giá lại”; giữ nguyên câu hỏi, bài làm, phản hồi cũ và bản sửa để đối chiếu. | Đánh dấu bản sửa là ý kiến người dùng, chưa phải kết luận đã kiểm chứng; đánh giá lại với rubric/nguồn. Nếu vẫn bất đồng, nhờ TA hoặc tạm dừng. | Chưa có trong HTML. `retry-explanation` chỉ hỗ trợ tự sửa bài học; không dùng thao tác này làm bằng chứng đã hỗ trợ sửa nhận định AI. |
 
 ### Ngoại lệ và trường hợp đặc thù
 
-- **Ngoài phạm vi — lớp ③:** Khi yêu cầu giải hộ toàn bộ bài, đổi sang chủ đề khác hoặc bỏ qua nguồn, nêu phạm vi “Hỗ trợ tự sửa bài hiện tại dựa trên tài liệu”, giữ bài đang làm và mời quay lại; không làm theo yêu cầu bỏ rubric. Chưa có bộ kiểm tra này trong Mock.
-- **Đặc thù học tập — lớp ④:** Chọn đúng nhưng giải thích sai/đoán không đủ để kết luận hiểu đúng; chọn sai nhưng giải thích đúng cần hỏi lại lựa chọn. Bản Working phải xét cả hai phần, không chấm chỉ theo `isCorrect` như Mock. Nội dung sửa còn sai hoặc trống không được báo “đã tự sửa đúng”.
+- **Ngoài phạm vi — lớp ③:** Khi yêu cầu giải hộ toàn bộ bài, đổi sang chủ đề khác hoặc bỏ qua nguồn, nêu phạm vi “Hỗ trợ tự sửa bài hiện tại dựa trên tài liệu”, giữ bài đang làm và mời quay lại; không làm theo yêu cầu bỏ rubric. Backend hiện trả `DECLINE` cho các mẫu này; GS15-GS17 đạt.
+- **Đặc thù học tập — lớp ④:** Chọn đúng nhưng giải thích sai/đoán không đủ để kết luận hiểu đúng; chọn sai nhưng giải thích đúng cần hỏi lại lựa chọn. Working slice hiện xét cả lựa chọn và giải thích qua `LEGACY_OPTION_MEANING`, không chấm chỉ theo lựa chọn A/B/C. Nội dung sửa còn sai hoặc trống không được báo “đã tự sửa đúng”; GS18-GS21 đạt phần runnable.
 - **Không ép nhận kết luận AI:** Học viên có thể sửa nhận định, nhờ TA hoặc tạm dừng khi bất đồng; không ghi hoàn thành hay tăng streak vì đã bấm nút. Tổng kết phải dùng đúng nội dung thực tế của từng lượt; không trình bày bản mẫu như lịch sử thật.
 
-**Cách đối chiếu khi demo:** Mở `codebase/cp2-flow.html`, dùng câu mẫu đúng, sai và mơ hồ để đi qua các nhánh hiện có; thử sửa ở `screen-4` và xem tổng kết. Với thiếu nguồn, lỗi dịch vụ và correction, đi theo sơ đồ trên vì chưa có màn hình tương tác. Thanh chọn kịch bản chỉ đổi biến/nhãn; nhánh thực tế được chọn bằng nội dung nhập và `submitStep2()`. Chưa thể tuyên bố bốn đường đi đều chạy được trên HTML tại CP4 cho tới khi bổ sung các nhánh còn thiếu.
+**Cách đối chiếu khi demo:** Chạy backend bằng `uvicorn app:app --reload --env-file .env` trong `codebase/` rồi mở root URL để UI gọi API thật. Dùng câu mẫu đúng, sai, mơ hồ, xin đáp án, bịa nguồn và lạc đề để đi qua các nhánh đang có. Với thiếu nguồn có chủ đích, lỗi dịch vụ mô phỏng, `clarification_count=1` và correction, đi theo sơ đồ trên vì chưa có màn hình/test hook tương ứng. Chưa thể tuyên bố bốn đường đi đều chạy được đầy đủ tại CP4 cho tới khi bổ sung các nhánh còn thiếu.
 
 ## §7. Kiểm thử
 
-**Bộ thử:** [eval/golden-set.md](eval/golden-set.md), 22 case tổng hợp từ hai câu trong Mock và các nhánh §5–§6; không gán chúng thành hội thoại thật. Cơ cấu: 6 case đủ căn cứ, 4 case lớp ①, 4 case lớp ②, 3 case lớp ③, 5 case lớp ④/correction. Chưa tìm thấy `02-guide.md` trong workspace nên chưa xác nhận cơ cấu này khớp §2.6 của guide.
+**Bộ thử:** [eval/golden-set.md](eval/golden-set.md), 22 case tổng hợp từ hai câu trong sản phẩm và các nhánh §5–§6; không gán chúng thành hội thoại thật. Cơ cấu: 6 case đủ căn cứ, 4 case lớp ①, 4 case lớp ②, 3 case lớp ③, 5 case lớp ④/correction. Kết quả chạy hiện tại được ghi ở [eval/cp3-test-results.md](eval/cp3-test-results.md). Điểm yếu còn lại: bộ case hiện chủ yếu là product-derived/synthetic, chưa có ≥10 case lấy hoặc phát triển từ chatlog thật như guide §2.6 khuyến nghị; nếu còn thời gian, cần bổ sung case từ `data/vlearn-pack/chatlog` bằng `turn_id`, không dán raw data dài.
 
 | Chiều chất lượng | Định nghĩa kiểm chứng |
 |---|---|
@@ -191,15 +191,17 @@ flowchart TD
 | Kiểm tra hiểu đúng | Xét cả lựa chọn và giải thích; bài sửa trống/sai không được xác nhận hoàn thành. |
 | Người dùng kiểm soát | Có thể làm rõ, sửa nhận định, nhờ TA hoặc tạm dừng; không mất bài đang nhập. |
 
-**Quality bar đề xuất để chốt CP4:** Đạt khi **≥20/22 case (90,9%)** qua toàn bộ yêu cầu của từng case, **đồng thời 100% case đánh dấu chặn nghiệm thu đạt**. Case chưa triển khai/không chạy được không tính pass và vẫn nằm trong mẫu số 22. Với model thật, chạy mỗi case ba lần cùng phiên bản prompt/model/nguồn; case chỉ pass khi cả ba lượt đạt. Không hạ ngưỡng sau khi thấy kết quả. Người chốt: Mai Văn Trường; Nguyễn Việt Đức và Hồ Ngọc Mai rà soát nhãn chuẩn trước lần chạy chính thức.
+**Quality bar chốt CP4:** Đạt khi **≥20/22 case (90,9%)** qua toàn bộ yêu cầu của từng case, **đồng thời 100% case đánh dấu chặn nghiệm thu đạt**. Case chưa triển khai/không chạy được không tính pass và vẫn nằm trong mẫu số 22. Với model thật, chạy mỗi case ba lần cùng phiên bản prompt/model/nguồn; case chỉ pass khi cả ba lượt đạt. Không hạ ngưỡng sau khi thấy kết quả. Người chốt: Mai Văn Trường; Nguyễn Việt Đức và Hồ Ngọc Mai rà soát nhãn chuẩn trước lần chạy chính thức.
+
+**Đối chiếu quality bar hiện tại:** Working slice đạt **16/16 case runnable**, nhưng nếu giữ đúng mẫu số 22 thì mới đạt **16/22**, chưa đạt ngưỡng **20/22**. Sáu case chưa chạy được là GS07, GS08, GS09, GS10, GS14, GS22 vì app chưa có cơ chế inject nguồn/rubric lỗi, mô phỏng lỗi dịch vụ, đếm clarification hoặc correction workflow. Kết quả này được ghi trung thực, không đổi quality bar sau khi thấy số.
 
 **Cách chạy:** Ghi revision code, model/prompt (hoặc “Mock”), phiên bản nguồn, đầu vào, đầu ra, kỳ vọng, pass/fail và lỗi E tương ứng. Hai người kiểm tra các case bất đồng; chưa thống nhất thì chưa pass. Sửa lỗi rồi chạy lại case ảnh hưởng và toàn bộ case chặn nghiệm thu. Nguồn mẫu trong golden set chỉ kiểm thử cơ chế; muốn chứng minh grounding trên tài liệu khóa học phải thay bằng đoạn tài liệu đã được nhóm duyệt.
 
 | Lượt | Loại kiểm tra | Kết quả | Kết luận |
 |---|---|---|---|
 | 17/09/2026 — rà mã | Đọc `submitStep2()` và `submitRetry()` | Phân loại bằng từ khóa/đáp án; thử lại luôn báo thành công; thiếu nhánh nguồn/correction | Chưa đạt thiết kế Working; không quy đổi thành tỷ lệ eval. |
-| Baseline 22 case | Chạy thực tế trên prototype | **Chưa chạy** | Chưa có tỷ lệ đạt. |
-| Sau sửa lỗi | Chạy lại với revision mới | **Chưa chạy** | Ghi kết quả thực tế trước CP6. |
+| Baseline 22 case trên backend có API key hợp lệ | Chạy thực tế qua `/api/session` và `/api/analyze` | 16 case chạy được; 5/16 đạt; 11/16 không đạt; 6/22 chưa chạy được do thiếu cơ chế | Chưa đủ tốt; lỗi chính là prompt quá bảo thủ, validator hạ `DIAGNOSE` thành `CLARIFY`, chưa xử lý lựa chọn/giải thích mâu thuẫn và guardrail chưa ổn. |
+| Sau cải tiến working slice | Chạy lại 22 case, ghi ở `eval/cp3-test-results.md` | 16/16 runnable đạt; AI cases 14/14; full set 16/22 do 6 case chưa có cơ chế chạy | Ba workflow chính đạt, nhưng chưa đạt full quality bar CP4 vì thiếu no-grounding/failure hook, clarification count và correction workflow. |
 
 ## §8. Phân công & kế hoạch
 
@@ -210,7 +212,9 @@ flowchart TD
 | Hồ Ngọc Mai | Prompt, UX, nội dung nguồn và validation | Mapping HAX §4b, rà gợi ý/rubric, biên bản thử nghiệm ẩn danh; không công bố liên hệ cá nhân. |
 | Dương Văn Thành | Code, tích hợp AI, validator, logging và demo | `codebase/`; bổ sung thiếu nguồn/correction, sửa kiểm tra thử lại, ghi rõ mock/thật trong demo. |
 
-**Thứ tự bàn giao:** (1) Trước CP4: rà nguồn/rubric, chốt spec và golden set; (2) sau chốt: bổ sung các nhánh thiếu, sửa tự báo đúng, rồi mới nối model; (3) trước CP6: chạy eval, sửa lỗi nghiêm trọng, thử với người dùng và hoàn thiện demo. Đây là kế hoạch, chưa phải công việc đã hoàn tất.
+**Trạng thái bàn giao hiện tại:** Working slice đã nối model thật, chạy được `/api/lesson`, `/api/session`, `/api/analyze` và đạt 16/16 case runnable. `data/vlearn-pack/` được giữ local để tham chiếu/mining nhưng bị `.gitignore`; sản phẩm runtime dùng dữ liệu đã chắt lọc trong `codebase/content/lesson.json`.
+
+**Thứ tự việc còn lại:** (1) Bổ sung test hook hoặc UI cho 6 case chưa chạy được: no-grounding, rubric mâu thuẫn, citation thiếu nội dung, timeout/schema lỗi, `clarification_count=1`, correction workflow; (2) bổ sung ít nhất 10 case lấy/phát triển từ chatlog thật bằng `turn_id`; (3) chạy lại full 22+ case và đối chiếu quality bar; (4) validation 10-15 phút với willing users; (5) hoàn thiện demo, ghi rõ phần nào working và phần nào còn là thiết kế đích.
 
 **Willing users theo canvas:** Vũ Quốc Huy, Nguyễn Quốc Cường, Hà Thị Mỹ Linh. CSV có 19/62 phản hồi chọn đồng ý thử; không suy ra danh tính ba người từ số tổng hợp.
 
@@ -225,3 +229,4 @@ flowchart TD
 | 17/09/2026 — CP1 | Điền user/job, pain và lát cắt | `canvas-cp1.md`; chọn vòng lặp học từ lỗi trước. |
 | 17/09/2026 — thiết kế | Bổ sung §4, §6, Conditional và mapping HAX | `codebase/cp2-flow.html`; phân biệt Mock với thiết kế đích, thêm nhánh thiếu nguồn và correction. |
 | 17/09/2026 — hoàn thiện spec | Cập nhật evidence từ 60/31 sang 62/33 phản hồi; thêm 3 ứng viên, nghiên cứu tương tự, lỗi, 22 case, quality bar và kế hoạch | CSV hiện tại có thêm phản hồi; E01–E12 làm căn cứ GS01–GS22. Chưa có model run hay user test để ghi kết quả. |
+| 18/09/2026 — working slice và CP3 eval | Cập nhật trạng thái từ Mock sang Working slice, ghi kết quả baseline và sau cải tiến, liên kết `eval/cp3-test-results.md` | Backend đã gọi LLM thật qua `/api/analyze`; 16/16 case runnable đạt, nhưng full set mới 16/22 nên chưa đạt quality bar 20/22. |
