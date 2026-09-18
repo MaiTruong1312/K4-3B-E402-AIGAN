@@ -1,10 +1,21 @@
 function switchAuthRole(role) {
   const isStudent = role === 'student';
-  document.getElementById('student-login-form').style.display = isStudent ? 'block' : 'none';
-  document.getElementById('teacher-login-form').style.display = isStudent ? 'none' : 'block';
-  document.getElementById('auth-tab-student').classList.toggle('active', isStudent);
-  document.getElementById('auth-tab-teacher').classList.toggle('active', !isStudent);
-  document.getElementById('auth-error').textContent = '';
+  const studentForm = document.getElementById('student-login-form');
+  const teacherForm = document.getElementById('teacher-login-form');
+  const tabStudent = document.getElementById('auth-tab-student');
+  const tabTeacher = document.getElementById('auth-tab-teacher');
+  const authError = document.getElementById('auth-error');
+
+  if (studentForm) studentForm.style.display = isStudent ? 'block' : 'none';
+  if (teacherForm) teacherForm.style.display = isStudent ? 'none' : 'block';
+  if (tabStudent) tabStudent.classList.toggle('active', isStudent);
+  if (tabTeacher) tabTeacher.classList.toggle('active', !isStudent);
+  if (authError) authError.textContent = '';
+}
+
+function closeAuthGate() {
+  const authGate = document.getElementById('auth-gate');
+  if (authGate) authGate.style.display = 'none';
 }
 
 async function postAuth(url, payload) {
@@ -23,14 +34,53 @@ function rememberAuth(data) {
   localStorage.setItem('vlearn_display_name', data.display_name);
 }
 
-function showStudentWorkspace(displayName) {
-  document.getElementById('auth-gate').style.display = 'none';
-  document.getElementById('instructor-panel').style.display = 'none';
-  document.querySelector('main.container').style.display = '';
+function showTeacherWorkspace(displayName) {
+  const authGate = document.getElementById('auth-gate');
+  const mainContainer = document.querySelector('main.container');
+  const interactiveView = document.getElementById('interactive-view');
+  const diagramView = document.getElementById('diagram-view');
+  const stepNavBar = document.getElementById('step-nav-bar');
+  const instructorPanel = document.getElementById('instructor-panel');
   const avatar = document.getElementById('current-user-avatar');
-  avatar.textContent = displayName.slice(0, 2).toUpperCase();
-  avatar.title = `Học viên: ${displayName}`;
-  document.getElementById('student-welcome-title').textContent = `Chào bạn, học viên ${displayName}!`;
+
+  if (authGate) authGate.style.display = 'none';
+  if (mainContainer) mainContainer.style.display = '';
+  if (interactiveView) interactiveView.style.display = 'none';
+  if (diagramView) diagramView.style.display = 'none';
+  if (stepNavBar) stepNavBar.style.display = 'none';
+  if (instructorPanel) instructorPanel.style.display = 'block';
+
+  if (avatar) {
+    avatar.textContent = (displayName || 'GV').slice(0, 2).toUpperCase();
+    avatar.title = `Giảng viên: ${displayName || 'Giảng viên'}`;
+  }
+}
+
+function showStudentWorkspace(displayName) {
+  const authGate = document.getElementById('auth-gate');
+  const mainContainer = document.querySelector('main.container');
+  const interactiveView = document.getElementById('interactive-view');
+  const diagramView = document.getElementById('diagram-view');
+  const stepNavBar = document.getElementById('step-nav-bar');
+  const instructorPanel = document.getElementById('instructor-panel');
+  const avatar = document.getElementById('current-user-avatar');
+  const title = document.getElementById('student-welcome-title');
+
+  if (authGate) authGate.style.display = 'none';
+  if (instructorPanel) instructorPanel.style.display = 'none';
+  if (diagramView) diagramView.style.display = 'none';
+  if (mainContainer) mainContainer.style.display = '';
+  if (interactiveView) interactiveView.style.display = 'block';
+  if (stepNavBar) stepNavBar.style.display = 'flex';
+
+  if (avatar) {
+    avatar.textContent = (displayName || 'HV').slice(0, 2).toUpperCase();
+    avatar.title = `Học viên: ${displayName || 'Học viên'}`;
+  }
+  if (title) title.textContent = `Chào bạn, học viên ${displayName || ''}!`;
+  if (typeof goToStep === 'function') {
+    goToStep(typeof currentStep === 'number' && currentStep > 0 ? currentStep : 1);
+  }
 }
 
 async function loginStudent(event) {
@@ -54,9 +104,7 @@ async function loginTeacher(event) {
       password: document.getElementById('teacher-password').value
     });
     rememberAuth(data);
-    document.getElementById('auth-gate').style.display = 'none';
-    document.querySelector('main.container').style.display = 'none';
-    document.getElementById('instructor-panel').style.display = 'block';
+    showTeacherWorkspace(data.display_name);
     await loadInstructorReport();
   } catch (error) {
     document.getElementById('auth-error').textContent = error.message;
@@ -64,10 +112,12 @@ async function loginTeacher(event) {
 }
 
 async function loadInstructorReport() {
+  if (!learningSessionId) throw new Error('Thiếu session_id giảng viên');
   const response = await fetch(`/api/instructor/report?session_id=${encodeURIComponent(learningSessionId)}`);
   const report = await response.json();
   if (!response.ok) throw new Error(report.detail || 'Không tải được báo cáo');
   const root = document.getElementById('instructor-report-content');
+  if (!root) return;
   root.replaceChildren();
 
   function formatDecision(decision) {
@@ -124,25 +174,90 @@ function switchAccount() {
   localStorage.removeItem('vlearn_role');
   localStorage.removeItem('vlearn_display_name');
   learningSessionId = null;
-  document.getElementById('instructor-panel').style.display = 'none';
-  document.querySelector('main.container').style.display = '';
-  document.getElementById('auth-gate').style.display = 'grid';
-  document.getElementById('student-login-form').reset();
-  document.getElementById('teacher-login-form').reset();
-  switchAuthRole('student');
+  const instructorPanel = document.getElementById('instructor-panel');
+  if (instructorPanel) instructorPanel.style.display = 'none';
+  const mainContainer = document.querySelector('main.container');
+  if (mainContainer) mainContainer.style.display = '';
+  const interactiveView = document.getElementById('interactive-view');
+  if (interactiveView) interactiveView.style.display = 'none';
+  const stepNavBar = document.getElementById('step-nav-bar');
+  if (stepNavBar) stepNavBar.style.display = 'none';
+  const authGate = document.getElementById('auth-gate');
+  if (authGate) authGate.style.display = 'grid';
+
+  const isInstructorPage = window.location.pathname.includes('/instructor') || window.location.pathname.includes('/teacher');
+  switchAuthRole(isInstructorPage ? 'teacher' : 'student');
+}
+
+function closeLessonOverview() {
+  const panel = document.getElementById('lesson-overview-panel');
+  if (panel) panel.style.display = 'none';
+}
+
+async function openLessonOverview() {
+  const panel = document.getElementById('lesson-overview-panel');
+  if (!panel) return;
+  panel.style.display = 'block';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  const titleEl = document.getElementById('lesson-overview-title');
+  const scopeEl = document.getElementById('lesson-overview-scope');
+  const passagesEl = document.getElementById('lesson-overview-passages');
+  const topicsEl = document.getElementById('lesson-overview-topics');
+
+  if (titleEl && titleEl.textContent) return;
+
+  try {
+    const res = await fetch('/api/lesson/overview');
+    const data = await res.json();
+    if (!res.ok) throw new Error('Không tải được tổng quan bài học');
+
+    if (titleEl) titleEl.textContent = data.title || 'Day 1: Khái niệm RAG';
+    if (scopeEl) scopeEl.textContent = data.scope || '';
+
+    if (passagesEl) {
+      passagesEl.replaceChildren();
+      (data.key_passages || []).forEach(p => {
+        const item = document.createElement('div');
+        item.style.cssText = 'padding: 10px 14px; background: var(--bg-subtle, #f8fafc); border-left: 3px solid #000; font-size: 13px; line-height: 1.5; color: #1e293b;';
+        item.innerHTML = `<strong style="font-family: monospace; color: #0f172a;">[${p.id}]</strong> ${p.text}...`;
+        passagesEl.appendChild(item);
+      });
+    }
+
+    if (topicsEl) {
+      topicsEl.replaceChildren();
+      (data.question_topics || []).forEach(t => {
+        const tag = document.createElement('span');
+        tag.className = 'institutional-badge';
+        tag.style.cssText = 'background: #f1f5f9; border: 1px solid #000; color: #0f172a; padding: 4px 10px; font-size: 12px; font-weight: 600;';
+        tag.textContent = `🎯 ${t.concept} (${t.type === 'multiple_choice' ? 'Trắc nghiệm' : 'Tự luận'})`;
+        topicsEl.appendChild(tag);
+      });
+    }
+  } catch (err) {
+    console.warn(err);
+  }
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
+  const isInstructorPage = window.location.pathname.includes('/instructor') || window.location.pathname.includes('/teacher');
   const sessionId = localStorage.getItem('vlearn_session_id');
   const role = localStorage.getItem('vlearn_role');
   const displayName = localStorage.getItem('vlearn_display_name');
-  if (!sessionId || !role) return;
+
+  if (!sessionId || !role) {
+    const authGate = document.getElementById('auth-gate');
+    if (authGate) authGate.style.display = 'grid';
+    switchAuthRole(isInstructorPage ? 'teacher' : 'student');
+    return;
+  }
+
   learningSessionId = sessionId;
-  if (role === 'student') showStudentWorkspace(displayName || 'Học viên');
-  if (role === 'teacher') {
-    document.getElementById('auth-gate').style.display = 'none';
-    document.querySelector('main.container').style.display = 'none';
-    document.getElementById('instructor-panel').style.display = 'block';
-    try { await loadInstructorReport(); } catch (_) { logoutUser(); }
+  if (role === 'student') {
+    showStudentWorkspace(displayName || 'Học viên');
+  } else if (role === 'teacher') {
+    showTeacherWorkspace(displayName || 'Giảng viên');
+    try { await loadInstructorReport(); } catch (err) { console.warn(err); switchAccount(); }
   }
 });

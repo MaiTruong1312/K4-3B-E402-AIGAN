@@ -1,5 +1,6 @@
   <div class="auth-gate" id="auth-gate">
-    <div class="auth-card">
+    <div class="auth-card" style="position: relative;">
+      <button class="citation-close" type="button" aria-label="Đóng" onclick="closeAuthGate()" style="position: absolute; top: 16px; right: 16px;">×</button>
       <div class="eyebrow">VLEARN · NHẬN DIỆN NGƯỜI DÙNG</div>
       <h1>Vào không gian học tập</h1>
       <div class="auth-tabs">
@@ -8,15 +9,18 @@
       </div>
       <form id="student-login-form" onsubmit="loginStudent(event)">
         <label for="student-code">Mã sinh viên</label>
-        <input id="student-code" name="student-code" autocomplete="username" maxlength="40" required placeholder="Nhập mã sinh viên">
-        <button class="btn-primary" type="submit">Bắt đầu học →</button>
+        <input id="student-code" name="student-code" autocomplete="username" maxlength="40" required placeholder="Nhập mã sinh viên (ví dụ: SV2026001)">
+        <div style="margin-top: 8px; font-size: 12px; color: var(--charcoal);">
+          Mã thử mẫu: <a href="javascript:void(0)" onclick="document.getElementById('student-code').value='SV2026001'" style="text-decoration: underline; font-weight: bold;">SV2026001</a> · <a href="javascript:void(0)" onclick="document.getElementById('student-code').value='SV2026002'" style="text-decoration: underline; font-weight: bold;">SV2026002</a>
+        </div>
+        <button class="btn-primary" type="submit" style="margin-top: 14px;">Bắt đầu học →</button>
       </form>
       <form id="teacher-login-form" style="display:none" onsubmit="loginTeacher(event)">
         <label for="teacher-username">Tài khoản giảng viên</label>
-        <input id="teacher-username" autocomplete="username" required>
+        <input id="teacher-username" autocomplete="username" required placeholder="admin" value="admin">
         <label for="teacher-password">Mật khẩu</label>
-        <input id="teacher-password" type="password" autocomplete="current-password" required>
-        <button class="btn-primary" type="submit">Mở báo cáo lớp →</button>
+        <input id="teacher-password" type="password" autocomplete="current-password" required placeholder="admin" value="admin">
+        <button class="btn-primary" type="submit" style="margin-top: 14px;">Mở báo cáo lớp →</button>
       </form>
       <p class="auth-error" id="auth-error" role="alert"></p>
     </div>
