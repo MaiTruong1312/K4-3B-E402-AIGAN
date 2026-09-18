@@ -1,3 +1,5 @@
+> **Truy vết phiên bản:** GS01–GS22 là thiết kế gốc; kết quả lịch sử tại [CP3](cp3-test-results.md), hiện trạng `015eb88` tại [current-results.md](current-results.md). Không có `run_current.py`. Để chạy tay: Q1 → `mcq-rag-role`, A cũ → C, B → B, C cũ → A; Q2 → `mcq-context`, B cũ → C, A → A. Giữ nguyên ý nghĩa và expected. [CL01–CL10](chatlog-derived.md) là bộ bổ sung, không thay mẫu số 22.
+
 # Golden set — D2 Học từ lỗi trước
 
 22 case thiết kế ngày 17/09/2026; **chưa chạy**. Đây là dữ liệu tổng hợp phục vụ kiểm thử, không phải trích dẫn khảo sát/chatlog. Nguồn câu hỏi: `codebase/cp2-flow.html`, `questionsData[0]` (Q1: RAG) và `[1]` (Q2: Chunking). A/C là đáp án sai, B là đúng trong bộ câu này. Khi chạy phải lưu phiên bản đầu vào và kết quả; không dùng chính phản hồi model làm đáp án chuẩn.
